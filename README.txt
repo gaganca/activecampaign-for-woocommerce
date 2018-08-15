@@ -12,28 +12,32 @@ ActiveCampaign for WooCommerce enables you to create abandoned cart automations 
 
 == Description ==
 
-ActiveCampaign for WooCommerce enables you to create abandoned cart automations and send emails to your contacts who abandon carts.
+ActiveCampaign for WooCommerce automatically syncs your customers and their purchase data into ActiveCampaign, including abandoned carts and whether or not the customer opted-in to marketing.
+
+ActiveCampaign for WooCommerce gives you the power to:
+- Sync all customers and their purchase data into ActiveCampaign in real time
+- Configure how long until a cart should be considered abandoned
+- Provide an opt-in checkbox on your checkout form for customers to opt-in to marketing
+- Configure what the opt-in checkbox says and if it's checked by default
+- Trigger automations when a customer abandons a cart
 
 == Installation ==
 
-1. Visit your ActiveCampaign account.
-2. Under the Settings tab, go the Integrations section.
-3. Click the 'Add Integration' button.
-4. Enter the URL for your WooCommerce-running site. For most sites, this will be the same as the home page URL, e.g., https://mysite.com.
-5. Go through the OAuth setup process.
-6. Once the integration has successfully been set up, login to your WordPress site.
-7. Install the plugin and then activate it from the 'Plugins' menu.
-8. Visit the settings page for the plugin under Settings > ActiveCampaign for WooCommerce.
-9. On the first tab of settings, enter your ActiveCampaign API Url and Key (both can be found under Settings > Developer in your ActiveCampaign account).
-10. On the second tab, select the amount of time you'd like our system to wait before considering a cart abandoned. The default is 1 hour.
-11. Save the settings.
-12. Sell something!
+Before You Start
+- Our plugin requires you to have the WooCommerce plugin installed and activated in WordPress.
+- Your hosting environment should meet WooCommerce's minimum requirements, including PHP 7.0 or greater.
 
-== Screenshots ==
-
-1. How an abandoned cart will appear in your ActiveCampaign account.
-2. How to set the amount of time between a cart being neglected, and being marked abandoned.
-3. How to set your API Key and URL for your ActiveCampaign account.
+Installation
+1. In your ActiveCampaign account, navigate to Settings.
+2. Click the Integrations tab.
+3. If your WooCommerce store is already listed here, skip to step 7. Otherwise, continue to step 4.
+4. Click the "Add Integration" button.
+5. Enter the URL of your WooCommerce site.
+6. Follow the connection process that appears in WooCommerce.
+7. In your WooCommerce store, install the "ActiveCampaign for WooCommerce" plugin and activate it.
+8. Navigate to the plugin settings page (Settings > ActiveCampaign for WooCommerce)
+9. Enter your ActiveCampaign API URL and API Key in the provided boxes.
+10. Click "Update Settings".
 
 == Changelog ==
 
