@@ -122,16 +122,25 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 		$order = $this->factory->from_woocommerce( $this->cart, $this->customer );
 
 		// If we already have an AC ID, then this is an update. Otherwise, it's a create.
-		if ( $order->get_id() ) {
-			$this->order_repository->update( $order );
-		} else {
+		try {
+			if ( $order->get_id() ) {
+				$this->order_repository->update( $order );
+			} else {
+				/**
+				 * The new order
+				 *
+				 * @var Activecampaign_For_Woocommerce_Ecom_Order $new_order
+				 */
+				$new_order = $this->order_repository->create( $order );
+				User_Meta_Service::set_current_cart_ac_id( $this->customer->get_id(), $new_order->get_id() );
+			}
+		} catch ( \Exception $e ) {
 			/**
-			 * The new order
-			 *
-			 * @var Activecampaign_For_Woocommerce_Ecom_Order $new_order
+			 * We have seen issues for a few users of this plugin where either the create or update call throws
+			 * an exception, which ends up breaking their store. This try/catch is a stop-gap measure for now.
 			 */
-			$new_order = $this->order_repository->create( $order );
-			User_Meta_Service::set_current_cart_ac_id( $this->customer->get_id(), $new_order->get_id() );
+
+			error_log( (string) $e );
 		}
 	}
 
@@ -140,6 +149,7 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 	 * in AC and save the ID the DB.
 	 *
 	 * @param int $user_id The WordPress User ID.
+	 *
 	 * @return bool
 	 */
 	private function verify_ac_customer_id( $user_id ) {
