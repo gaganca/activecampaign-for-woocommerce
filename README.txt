@@ -2,8 +2,8 @@
 Contributors: acteamintegrations, bartboy011
 Tags: marketing, ecommerce, woocommerce, email, activecampaign, abandoned cart
 Requires at least: 4.7
-Tested up to: 4.9.6
-Stable tag: 1.0.1
+Tested up to: 4.9.8
+Stable tag: 1.0.2
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -39,13 +39,11 @@ Installation
 9. Enter your ActiveCampaign API URL and API Key in the provided boxes.
 10. Click "Update Settings".
 
-== Screenshots ==
-
-1. How an abandoned cart will appear in your ActiveCampaign account.
-2. How to set the amount of time between a cart being neglected, and being marked abandoned.
-3. How to set your API Key and URL for your ActiveCampaign account.
-
 == Changelog ==
+
+= 1.0.2 =
+* Allow Woocommerce API calls to work when Wordpress is behind a load balancer
+* Fixed a bug where abandoned cart functionality would not work if an item had no categories
 
 = 1.0.1 =
 * Prevent exceptions from breaking WooCommerce cart functionality

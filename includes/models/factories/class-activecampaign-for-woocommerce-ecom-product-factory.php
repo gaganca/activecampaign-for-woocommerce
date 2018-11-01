@@ -77,7 +77,12 @@ class Activecampaign_For_Woocommerce_Ecom_Product_Factory {
 	 */
 	private function get_product_category( WC_Product $product ) {
 		$terms = get_the_terms( $product->get_id(), 'product_cat' );
-		$term  = array_pop( $terms );
+
+		if ( ! is_array( $terms ) ) {
+			return null;
+		}
+
+		$term = array_pop( $terms );
 		if ( $term instanceof WP_Term ) {
 			return $term->name;
 		}
