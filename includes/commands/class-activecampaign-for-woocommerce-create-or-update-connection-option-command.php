@@ -240,6 +240,13 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 			$this->maybe_find_connection_option_by_connection_id();
 
 			$this->update_connection_option( ++ $attempts );
+		} catch ( \Exception $e ) {
+			/**
+			 * We have seen issues for a few users of this plugin where either the create or update call throws
+			 * an exception, which ends up breaking their store. This try/catch is a stop-gap measure for now.
+			 */
+
+			error_log( (string) $e );
 		}
 
 		$this->update_connection_option_id_cache( $connection_option->get_id() );
