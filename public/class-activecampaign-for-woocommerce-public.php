@@ -88,6 +88,22 @@ class Activecampaign_For_Woocommerce_Public {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
+		wp_register_script(
+			$this->plugin_name,
+			plugin_dir_url( __FILE__ ) . 'js/activecampaign-for-woocommerce-public.js',
+			array( 'jquery' )
+		);
+
+		$sync_guest_abandoned_cart_nonce = wp_create_nonce( 'sync_guest_abandoned_cart_nonce' );
+
+		wp_localize_script(
+			$this->plugin_name,
+			'public_vars',
+			array(
+				'ajaxurl' => admin_url( "admin-ajax.php?nonce=$sync_guest_abandoned_cart_nonce" ),
+			)
+		);
+
 		wp_enqueue_script(
 			$this->plugin_name,
 			plugin_dir_url( __FILE__ ) . 'js/activecampaign-for-woocommerce-public.js',

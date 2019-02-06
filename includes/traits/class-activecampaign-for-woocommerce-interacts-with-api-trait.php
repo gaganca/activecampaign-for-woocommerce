@@ -131,6 +131,9 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 		$filter_value,
 		callable $response_massager = null
 	) {
+		$client->set_filters( [] );
+		$client->with_body( '' );
+
 		$result = $client
 			->get( self::RESOURCE_NAME_PLURAL )
 			->with_filter( $filter_name, $filter_value )
@@ -173,6 +176,8 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 		Activecampaign_For_Woocommerce_Ecom_Model_Interface $model,
 		callable $response_massager = null
 	) {
+		$client->set_filters( [] );
+
 		$resource = $model->serialize_to_array();
 
 		$body = [
@@ -226,6 +231,8 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 		Activecampaign_For_Woocommerce_Ecom_Model_Interface $model,
 		callable $response_massager = null
 	) {
+		$client->set_filters( [] );
+
 		$resource = $model->serialize_to_array();
 
 		$body = [

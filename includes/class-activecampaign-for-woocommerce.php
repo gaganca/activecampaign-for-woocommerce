@@ -27,6 +27,7 @@ use Activecampaign_For_Woocommerce_Loader as Loader;
 use Activecampaign_For_Woocommerce_Public as AC_Public;
 use Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command as Set_Connection_Id_Cache_Command;
 use Activecampaign_For_Woocommerce_Update_Cart_Command as Update_Cart_Command;
+use Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command as Sync_Guest_Abandoned_Cart_Command;
 
 /**
  * The core plugin class.
@@ -131,9 +132,9 @@ class Activecampaign_For_Woocommerce {
 	private $create_and_save_cart_id_command;
 
 	/**
-	 * Handles creating and then saving to the DB the persistent cart id.
+	 * Handles sending the cart and its products to AC for the given customer.
 	 *
-	 * @var Create_And_Save_Cart_Id The create and save cart id command class.
+	 * @var Update_Cart_Command The update cart command class.
 	 */
 	private $update_cart_command;
 
@@ -167,6 +168,13 @@ class Activecampaign_For_Woocommerce {
 	private $clear_user_meta_command;
 
 	/**
+	 * Handles sending the guest customer and pending order to AC.
+	 *
+	 * @var Sync_Guest_Abandoned_Cart_Command The sync guest abandoned cart command class.
+	 */
+	private $sync_guest_abandoned_cart_command;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -197,6 +205,8 @@ class Activecampaign_For_Woocommerce {
 	 *                                                                                    command class.
 	 * @param Clear_User_Meta_Command                    $clear_user_meta_command         The clear user meta command
 	 *                                                                                    class.
+	 * @param Sync_Guest_Abandoned_Cart_Command          $sync_guest_abandoned_cart_command The sync guest abandoned
+	 *                                                                                      cart command class.
 	 *
 	 * @since    1.0.0
 	 */
@@ -216,7 +226,8 @@ class Activecampaign_For_Woocommerce {
 		Delete_Cart_Id $delete_cart_id_command,
 		Add_Cart_Id_To_Order $add_cart_id_to_order_command,
 		Add_Accepts_Marketing_To_Customer_Meta $add_am_to_meta_command,
-		Clear_User_Meta_Command $clear_user_meta_command
+		Clear_User_Meta_Command $clear_user_meta_command,
+		Sync_Guest_Abandoned_Cart_Command $sync_guest_abandoned_cart_command
 	) {
 		$this->version     = $version;
 		$this->plugin_name = $plugin_name;
@@ -235,6 +246,7 @@ class Activecampaign_For_Woocommerce {
 		$this->add_cart_id_to_order_command               = $add_cart_id_to_order_command;
 		$this->add_accepts_marketing_to_customer_meta_command = $add_am_to_meta_command;
 		$this->clear_user_meta_command                        = $clear_user_meta_command;
+		$this->sync_guest_abandoned_cart_command              = $sync_guest_abandoned_cart_command;
 	}
 
 	/**
@@ -420,6 +432,17 @@ class Activecampaign_For_Woocommerce {
 			'handle_woocommerce_checkout_form'
 		);
 
+		$this->loader->add_action(
+			'wp_ajax_activecampaign_for_woocommerce_cart_sync_guest',
+			$this->sync_guest_abandoned_cart_command,
+			'execute'
+		);
+
+		$this->loader->add_action(
+			'wp_ajax_nopriv_activecampaign_for_woocommerce_cart_sync_guest',
+			$this->sync_guest_abandoned_cart_command,
+			'execute'
+		);
 	}
 
 	/**

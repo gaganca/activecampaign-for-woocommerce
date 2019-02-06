@@ -32,10 +32,11 @@ use Activecampaign_For_Woocommerce_Loader as Loader;
 use Activecampaign_For_Woocommerce_Public as AC_Public;
 use Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command as Set_Connection_Id_Cache_Command;
 use Activecampaign_For_Woocommerce_Update_Cart_Command as Update_Cart_Command;
+use Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command as Sync_Guest_Abandoned_Cart_Command;
 use Psr\Container\ContainerInterface;
 
 return array(
-	Activecampaign_For_Woocommerce::class => function (
+	Activecampaign_For_Woocommerce::class    => function (
 		Loader $loader,
 		Admin $admin,
 		AC_Public $public,
@@ -49,7 +50,8 @@ return array(
 		Delete_Cart_Id $delete_cart_id_command,
 		Add_Cart_Id_To_Order $add_cart_id_to_order_command,
 		Add_Accepts_Marketing_To_Customer_Meta $add_am_to_meta_command,
-		Clear_User_Meta_Command $clear_user_meta_command
+		Clear_User_Meta_Command $clear_user_meta_command,
+		Sync_Guest_Abandoned_Cart_Command $sync_guest_abandoned_cart_command
 	) {
 		$version = defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ?
 			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION :
@@ -75,11 +77,12 @@ return array(
 			$delete_cart_id_command,
 			$add_cart_id_to_order_command,
 			$add_am_to_meta_command,
-			$clear_user_meta_command
+			$clear_user_meta_command,
+			$sync_guest_abandoned_cart_command
 		);
 	},
 
-	Admin::class                          => function ( ContainerInterface $c ) {
+	Admin::class                             => function ( ContainerInterface $c ) {
 		$version = defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ?
 			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION :
 			'1.0.0';
@@ -95,7 +98,7 @@ return array(
 		return new Admin( $plugin_name, $version, $validator, $event );
 	},
 
-	Api_Client::class                     => function () {
+	Api_Client::class                        => function () {
 		$settings = get_option( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_OPTION_NAME );
 
 		$api_uri = isset( $settings['api_url'] ) ? $settings['api_url'] : null;
@@ -104,7 +107,7 @@ return array(
 		return new Api_Client( $api_uri, $api_key );
 	},
 
-	AC_Public::class                      => function ( Admin $admin ) {
+	AC_Public::class                         => function ( Admin $admin ) {
 		$version = defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ?
 			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION :
 			'1.0.0';
@@ -116,13 +119,30 @@ return array(
 		return new AC_Public( $plugin_name, $version, $admin );
 	},
 
-	Update_Cart_Command::class            => function (
+	Update_Cart_Command::class               => function (
 		Admin $admin,
 		Ecom_Order_Factory $factory,
 		Ecom_Order_Repository $order_repository,
 		Ecom_Customer_Repository $customer_repository
 	) {
 		return new Update_Cart_Command(
+			null,
+			null,
+			$admin,
+			$factory,
+			$order_repository,
+			$customer_repository
+		);
+	},
+
+	Sync_Guest_Abandoned_Cart_Command::class => function (
+		Admin $admin,
+		Ecom_Order_Factory $factory,
+		Ecom_Order_Repository $order_repository,
+		Ecom_Customer_Repository $customer_repository
+	) {
+		return new Sync_Guest_Abandoned_Cart_Command(
+			null,
 			null,
 			null,
 			$admin,

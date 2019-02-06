@@ -147,6 +147,20 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 	}
 
 	/**
+	 * Validate that the site URL matches the externalid.
+	 *
+	 * @param array $response_data Decoded guzzle response data.
+	 */
+	private function validate_externalid_matches_site_url( $response_data ) {
+		foreach ( $response_data['connections'] as $key => $value ) {
+			if ( get_site_url() === $response_data['connections'][ $key ]['externalid'] ) {
+				return;
+			}
+		}
+		$this->errors[] = 'ACTION NEEDED: Please connect your WooCommerce store in your ActiveCampaign account first.';
+	}
+
+	/**
 	 * Validates that the changing api credentials still work.
 	 *
 	 * @param array $new_data     The array of new data.
@@ -178,12 +192,12 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 		) {
 			$this->client->set_api_key( $new_data['api_key'] );
 			$this->client->set_api_uri( $new_data['api_url'] );
-
 			$this->client->configure_client();
 
 			try {
-				$this->client->get( 'connections' )
+				$response = $this->client->get( 'connections' )
 							 ->execute();
+				$this->validate_externalid_matches_site_url( json_decode( $response->getBody(), true ) );
 			} catch ( ClientException $e ) {
 				$this->errors[] = 'Either the API Url or API Key is invalid.';
 			} catch ( GuzzleException $e ) {

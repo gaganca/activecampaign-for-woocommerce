@@ -337,6 +337,16 @@ class Activecampaign_For_Woocommerce_Api_Client {
 	}
 
 	/**
+	 * Sets the filters.
+	 *
+	 * @param array $filters The filters array.
+	 * @return void
+	 */
+	public function set_filters( $filters ) {
+		$this->filters = $filters;
+	}
+
+	/**
 	 * Executes the request.
 	 *
 	 * First creates a filtered endpoint, and then passes that endpoint to the Guzzle

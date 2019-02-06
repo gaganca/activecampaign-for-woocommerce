@@ -64,7 +64,14 @@ class Activecampaign_For_Woocommerce_Ecom_Order_Factory {
 		$date = new DateTime( 'now', new DateTimeZone( 'UTC' ) );
 
 		$order->set_id( $this->get_ac_id() );
-		$order->set_externalcheckoutid( $this->get_external_id() );
+
+		$external_id = $this->get_external_id();
+
+		if ( ! $external_id ) {
+			$external_id = wc()->session->get_customer_id();
+		}
+
+		$order->set_externalcheckoutid( $external_id );
 		$order->set_source( '1' );
 		$order->set_email( $customer->get_email() );
 		$order->set_total_price( $this->get_cart_total( $cart ) );

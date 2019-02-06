@@ -12,6 +12,7 @@
 
 use Activecampaign_For_Woocommerce_Executable_Interface as Executable;
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
+use Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command as Sync_Guest_Abandoned_Cart_Command;
 
 /**
  * The Add_Cart_Id_To_Order_Command Class.
@@ -47,6 +48,16 @@ class Activecampaign_For_Woocommerce_Add_Cart_Id_To_Order_Command implements Exe
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
+			$externalcheckoutid = Sync_Guest_Abandoned_Cart_Command::generate_externalcheckoutid(
+				wc()->session->get_customer_id(),
+				$order->get_billing_email()
+			);
+
+			$order->update_meta_data(
+				ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME,
+				$externalcheckoutid
+			);
+
 			return $order;
 		}
 
