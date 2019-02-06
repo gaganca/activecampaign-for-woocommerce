@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3
+class ComposerStaticInit80011ea3d78865e91bc66e69f65a40ae
 {
     public static $files = array (
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
@@ -111,11 +111,13 @@ class ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3
         'Activecampaign_For_Woocommerce_I18n' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce-i18n.php',
         'Activecampaign_For_Woocommerce_Interacts_With_Api' => __DIR__ . '/../..' . '/includes/traits/class-activecampaign-for-woocommerce-interacts-with-api-trait.php',
         'Activecampaign_For_Woocommerce_Loader' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce-loader.php',
+        'Activecampaign_For_Woocommerce_Logger' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce-logger.php',
         'Activecampaign_For_Woocommerce_Public' => __DIR__ . '/../..' . '/public/class-activecampaign-for-woocommerce-public.php',
         'Activecampaign_For_Woocommerce_Repository_Interface' => __DIR__ . '/../..' . '/includes/repositories/interfaces/class-activecampaign-for-woocommerce-repository-interface.php',
         'Activecampaign_For_Woocommerce_Resource_Not_Found_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-resource-not-found-exception.php',
         'Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-resource-unprocessable-exception.php',
         'Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-set-connection-id-cache-command.php',
+        'Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-sync-guest-abandoned-cart-command.php',
         'Activecampaign_For_Woocommerce_Triggerable_Interface' => __DIR__ . '/../..' . '/includes/events/class-activecampaign-for-woocommerce-triggerable-interface.php',
         'Activecampaign_For_Woocommerce_Uninstall_Plugin_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-uninstall-plugin-command.php',
         'Activecampaign_For_Woocommerce_Update_Cart_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-update-cart-command.php',
@@ -285,9 +287,9 @@ class ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc969d0c418bf9b0daeaeed7b34bc46e3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit80011ea3d78865e91bc66e69f65a40ae::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit80011ea3d78865e91bc66e69f65a40ae::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit80011ea3d78865e91bc66e69f65a40ae::$classMap;
 
         }, null, ClassLoader::class);
     }
