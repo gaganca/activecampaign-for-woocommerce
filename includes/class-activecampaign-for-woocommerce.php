@@ -311,6 +311,28 @@ class Activecampaign_For_Woocommerce {
 	 * @access   private
 	 */
 	private function define_command_hooks() {
+		$this->define_admin_commands();
+
+		/**
+		 * If the site admin has not yet configured their plugin, bail out before
+		 * registering any public commands since they will not work without the
+		 * plugin being configured.
+		 */
+		if ( ! $this->admin->get_options() ) {
+			return;
+		}
+
+		$this->define_public_commands();
+	}
+
+	/**
+	 * Registers commands related to the admin portion of the WordPress site with
+	 * action hooks.
+	 *
+	 * @since 1.2.1
+	 * @access private
+	 */
+	private function define_admin_commands() {
 		/**
 		 * By including priority 1, we ensure that the connection id caching occurs
 		 * before the create or update command.
@@ -333,7 +355,16 @@ class Activecampaign_For_Woocommerce {
 			$this->clear_user_meta_command,
 			'execute'
 		);
+	}
 
+	/**
+	 * Registers commands related to the public-facing portion of the WordPress site with
+	 * action hooks.
+	 *
+	 * @since 1.2.1
+	 * @access private
+	 */
+	private function define_public_commands() {
 		$this->loader->add_action(
 			'activecampaign_for_woocommerce_cart_updated',
 			$this->create_and_save_cart_id_command,
@@ -414,6 +445,15 @@ class Activecampaign_For_Woocommerce {
 	 * @throws Exception Thrown when Container definitions are missing.
 	 */
 	private function define_public_hooks() {
+		/**
+		 * If the site admin has not yet configured their plugin, bail out before
+		 * registering any public commands since they will not work without the
+		 * plugin being configured.
+		 */
+		if ( ! $this->admin->get_options() ) {
+			return;
+		}
+
 		$this->loader->add_action(
 			'wp_enqueue_scripts',
 			$this->public,
