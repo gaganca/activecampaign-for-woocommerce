@@ -11,6 +11,8 @@
  */
 
 use Activecampaign_For_Woocommerce_Api_Client as Client;
+use Activecampaign_For_Woocommerce_Connection_Repository as Connection_Repository;
+use Activecampaign_For_Woocommerce_Resource_Not_Found_Exception as Resource_Not_Found;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -24,11 +26,18 @@ use GuzzleHttp\Exception\GuzzleException;
  */
 class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 	/**
-	 * The API Client to use for API Key and URL Validation.
+	 * Client to ActiveCampaign API.
 	 *
 	 * @var Activecampaign_For_Woocommerce_Api_Client The Api Client.
 	 */
 	private $client;
+
+	/**
+	 * Access to connections via ActiveCampaign API.
+	 *
+	 * @var Activecampaign_For_Woocommerce_Connection_Repository
+	 */
+	private $connection_repository;
 
 	/**
 	 * An array that will errors placed into it to be returned from the validation.
@@ -40,10 +49,12 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 	/**
 	 * Activecampaign_For_Woocommerce_Admin_Settings_Validator constructor.
 	 *
-	 * @param Activecampaign_For_Woocommerce_Api_Client $client The API Client.
+	 * @param Client                $client The API Client.
+	 * @param Connection_Repository $connection_repository The repository for connections.
 	 */
-	public function __construct( Client $client ) {
-		$this->client = $client;
+	public function __construct( Client $client, Connection_Repository $connection_repository ) {
+		$this->client                = $client;
+		$this->connection_repository = $connection_repository;
 	}
 
 	/**
@@ -65,7 +76,9 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 
 		$this->validate_ab_cart_wait_time( $new_data, $current_data );
 
-		$this->validate_changing_api_details( $new_data, $current_data );
+		if ( empty( $this->errors ) ) {
+			$this->validate_changing_api_details( $new_data, $current_data );
+		}
 
 		return $this->errors;
 	}
@@ -190,20 +203,30 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 			) &&
 			$both_api_key_and_url_set
 		) {
-			$this->client->set_api_key( $new_data['api_key'] );
-			$this->client->set_api_uri( $new_data['api_url'] );
-			$this->client->configure_client();
+			$old_api_key = $this->client->get_api_key();
+			$old_api_uri = $this->client->get_api_uri();
 
 			try {
-				$response = $this->client->get( 'connections' )
-							 ->execute();
-				$this->validate_externalid_matches_site_url( json_decode( $response->getBody(), true ) );
+				// Temporarily set new credentials
+				$this->client->set_api_key( $new_data['api_key'] );
+				$this->client->set_api_uri( $new_data['api_url'] );
+				$this->client->configure_client();
+
+				// Get existing connections
+				$this->connection_repository->find_current();
+			} catch ( Resource_Not_Found $e ) {
+				$this->errors[] = 'ACTION NEEDED: Please connect your WooCommerce store in your ActiveCampaign account first.';
 			} catch ( ClientException $e ) {
 				$this->errors[] = 'Either the API Url or API Key is invalid.';
 			} catch ( GuzzleException $e ) {
 				$this->errors[] = 'Something went wrong while authenticating, please try again.';
 			} catch ( \Exception $e ) {
 				$this->errors[] = 'Something went wrong while authenticating, please try again.';
+			} finally {
+				// Restore old credentials
+				$this->client->set_api_key( $old_api_key );
+				$this->client->set_api_uri( $old_api_uri );
+				$this->client->configure_client();
 			}
 		}
 	}

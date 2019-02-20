@@ -111,6 +111,16 @@ class Activecampaign_For_Woocommerce_Connection_Repository implements Repository
 	}
 
 	/**
+	 * Finds a connection for current WooCommerce website.
+	 *
+	 * @return Ecom_Model
+	 * @throws Resource_Not_Found Thrown when the connection could not be found.
+	 */
+	public function find_current() {
+		return $this->find_by_filter( 'externalid', get_home_url() );
+	}
+
+	/**
 	 * Creates a remote resource and updates the model with the returned data.
 	 *
 	 * @param Ecom_Model $model The model to be created remotely.

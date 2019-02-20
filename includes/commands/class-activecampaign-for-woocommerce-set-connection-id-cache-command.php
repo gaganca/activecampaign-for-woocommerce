@@ -42,13 +42,6 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 	 */
 	private $admin;
 
-	/**
-	 * The external id of the connection.
-	 *
-	 * @var string
-	 * @since 1.0.0
-	 */
-	private $external_id;
 
 	/**
 	 * Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command constructor.
@@ -60,9 +53,8 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 	 * @param Repository $repository The connection repository instance.
 	 */
 	public function __construct( Admin $admin, Repository $repository ) {
-		$this->repository  = $repository;
-		$this->admin       = $admin;
-		$this->external_id = get_home_url();
+		$this->repository = $repository;
+		$this->admin      = $admin;
 	}
 
 	/**
@@ -114,7 +106,7 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 			 * @var Connection $connection
 			 * @since 1.0.0
 			 */
-			$connection = $this->repository->find_by_filter( 'externalid', $this->external_id );
+			$connection = $this->repository->find_current();
 		} catch ( Resource_Not_Found $e ) {
 			$this->admin->add_async_processing_notification(
 				$this->formatted_error_text(),

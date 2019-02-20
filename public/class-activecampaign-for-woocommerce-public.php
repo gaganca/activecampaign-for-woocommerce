@@ -120,10 +120,6 @@ class Activecampaign_For_Woocommerce_Public {
 	 * owner of the site is able to customize on which hook this method should be called.
 	 */
 	public function handle_woocommerce_checkout_form() {
-		if ( ! is_user_logged_in() ) {
-			return;
-		}
-
 		if ( isset( $this->admin->get_options()['checkbox_display_option'] ) ) {
 			$setting = $this->admin->get_options()['checkbox_display_option'];
 

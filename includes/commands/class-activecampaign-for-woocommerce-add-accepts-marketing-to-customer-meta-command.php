@@ -31,6 +31,9 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 	 * Checks if the user is logged in. If so, and there's a persistent cart,
 	 * saves that cart id to the order meta table.
 	 *
+	 * If not, saves the accepts marketing value in the order meta table, so it can
+	 * still be saved on the eventual customer that will be created for the order.
+	 *
 	 * @param mixed ...$args An array of arguments that may be passed in from the action/filter called.
 	 *
 	 * @return WC_Order
@@ -47,15 +50,17 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 			return $order;
 		}
 
-		$id = $order->get_customer_id();
-
-		if ( ! $id ) {
-			return $order;
-		}
-
 		$accepts_marketing = $this->extract_accepts_marketing_value();
 
-		$this->update_user_accepts_marketing( $id, $accepts_marketing );
+		$id = $order->get_customer_id();
+
+		// If a customer is logged in, set the value of accepts marketing on the user meta-data.
+		// For guest checkouts set it on the order meta-data.
+		if ( ! $id ) {
+			$this->update_order_accepts_marketing( $order, $accepts_marketing );
+		} else {
+			$this->update_user_accepts_marketing( $id, $accepts_marketing );
+		}
 
 		return $order;
 	}
@@ -99,5 +104,18 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 		// The linter definitions don't like that we're invoking another plugin's actions
 		do_action( 'woocommerce_update_customer', $id );
 		// phpcs:enable
+	}
+
+	/**
+	 * Update the order's metadata with the accepts marketing value so it is included in the webhook
+	 *
+	 * @param WC_Order $order             The order.
+	 * @param int      $accepts_marketing Value of the checkbox.
+	 */
+	private function update_order_accepts_marketing( $order, $accepts_marketing ) {
+		$order->update_meta_data(
+			User_Meta_Service::ACTIVECAMPAIGN_ACCEPTS_MARKETING,
+			$accepts_marketing
+		);
 	}
 }

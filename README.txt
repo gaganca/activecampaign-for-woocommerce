@@ -3,7 +3,7 @@ Contributors: acteamintegrations, bartboy011
 Tags: marketing, ecommerce, woocommerce, email, activecampaign, abandoned cart
 Requires at least: 4.7
 Tested up to: 5.0.3
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -15,11 +15,11 @@ ActiveCampaign for WooCommerce enables you to create abandoned cart automations 
 ActiveCampaign for WooCommerce automatically syncs your customers and their purchase data into ActiveCampaign, including abandoned carts and whether or not the customer opted-in to marketing.
 
 ActiveCampaign for WooCommerce gives you the power to:
-- Sync all customers and their purchase data into ActiveCampaign in real time.
-- Configure how long until a cart should be considered abandoned.
-- Provide an opt-in checkbox on your checkout form for customers to opt-in to marketing.
-- Configure what the opt-in checkbox says and if it's checked by default.
-- Trigger automations when a customer abandons a cart.
+- Sync all customers and their purchase data into ActiveCampaign in real time
+- Configure how long until a cart should be considered abandoned
+- Provide an opt-in checkbox on your checkout form for customers to opt-in to marketing
+- Configure what the opt-in checkbox says and if it's checked by default
+- Trigger automations when a customer abandons a cart
 
 == Installation ==
 
@@ -40,6 +40,10 @@ Installation
 10. Click "Update Settings".
 
 == Changelog ==
+
+= 1.2.0 =
+* Accepts Marketing for Guests
+* Local setup and readme updates
 
 = 1.1.0 =
 * Added support for guest abandoned carts
