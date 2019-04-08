@@ -14,8 +14,9 @@ use Activecampaign_For_Woocommerce_Api_Client as Client;
 use Activecampaign_For_Woocommerce_Connection_Repository as Connection_Repository;
 use Activecampaign_For_Woocommerce_Resource_Not_Found_Exception as Resource_Not_Found;
 
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
+use AcVendor\GuzzleHttp\Exception\ClientException;
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
+use AcVendor\Psr\Log\LoggerInterface;
 
 /**
  * Handles validating changes to the admin settings for this plugin.
@@ -47,14 +48,23 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 	private $errors;
 
 	/**
+	 * Our PSR-3 compliant logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	private $log;
+
+	/**
 	 * Activecampaign_For_Woocommerce_Admin_Settings_Validator constructor.
 	 *
-	 * @param Client                $client The API Client.
-	 * @param Connection_Repository $connection_repository The repository for connections.
+	 * @param Activecampaign_For_Woocommerce_Api_Client $client The API Client.
+	 * @param Connection_Repository                     $connection_repository The repository for connections.
+	 * @param LoggerInterface                           $log PSR-3 Logger.
 	 */
-	public function __construct( Client $client, Connection_Repository $connection_repository ) {
+	public function __construct( Client $client, Connection_Repository $connection_repository, LoggerInterface $log ) {
 		$this->client                = $client;
 		$this->connection_repository = $connection_repository;
+		$this->log                   = $log;
 	}
 
 	/**
@@ -215,12 +225,16 @@ class Activecampaign_For_Woocommerce_Admin_Settings_Validator {
 				// Get existing connections
 				$this->connection_repository->find_current();
 			} catch ( Resource_Not_Found $e ) {
+				$this->log->error( (string) $e );
 				$this->errors[] = 'ACTION NEEDED: Please connect your WooCommerce store in your ActiveCampaign account first.';
 			} catch ( ClientException $e ) {
+				$this->log->error( (string) $e );
 				$this->errors[] = 'Either the API Url or API Key is invalid.';
 			} catch ( GuzzleException $e ) {
+				$this->log->error( (string) $e );
 				$this->errors[] = 'Something went wrong while authenticating, please try again.';
 			} catch ( \Exception $e ) {
+				$this->log->error( (string) $e );
 				$this->errors[] = 'Something went wrong while authenticating, please try again.';
 			} finally {
 				// Restore old credentials

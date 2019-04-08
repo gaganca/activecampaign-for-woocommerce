@@ -15,6 +15,7 @@ use Activecampaign_For_Woocommerce_Connection_Option as Connection_Option;
 use Activecampaign_For_Woocommerce_Connection_Option_Repository as Repository;
 
 use Activecampaign_For_Woocommerce_Executable_Interface as Executable;
+use AcVendor\Psr\Log\LoggerInterface;
 
 /**
  * The Create Or Update Connection Option Command Class.
@@ -65,6 +66,13 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 	private $connection_option;
 
 	/**
+	 * The logger interface.
+	 *
+	 * @var LoggerInterface The logger interface.
+	 */
+	private $logger;
+
+	/**
 	 * Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command constructor.
 	 *
 	 * @throws Exception When the container is missing definitions.
@@ -73,12 +81,16 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 	 * @param Admin             $admin The Admin singleton instance.
 	 * @param Repository        $repository The connection option repository singleton.
 	 * @param Connection_Option $connection_option The connection option model to optionally use.
+	 * @param LoggerInterface   $logger The logger interface.
 	 */
-	public function __construct( Admin $admin, Repository $repository, Connection_Option $connection_option = null ) {
+	public function __construct( Admin $admin, Repository $repository, Connection_Option $connection_option = null, LoggerInterface $logger = null ) {
 		$this->admin             = $admin;
 		$this->repository        = $repository;
 		$this->connection_option = $connection_option;
+		$this->logger            = $logger;
 	}
+
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 
 	/**
 	 * Executes the command.
@@ -102,10 +114,13 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 		$this->settings = $this->admin->get_options();
 
 		if ( $this->necessary_values_are_missing() ) {
+			$this->logger->error( 'Create or update connection option command: connection_id or abcart_wait values are missing.' );
+
 			return;
 		}
 
 		if ( $this->connection_option_id_cache_is_missing() ) {
+
 			$this->maybe_find_connection_option_by_connection_id();
 
 			if ( $this->connection_option ) {
@@ -116,6 +131,8 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 				return;
 			}
 
+			$this->logger->debug( 'Create or update connection option command: connection option not found.' );
+
 			$this->create_connection_option();
 
 			return;
@@ -123,6 +140,7 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 
 		$this->update_connection_option();
 	}
+	// phpcs:enable
 
 	/**
 	 * Checks if values necessary to the command are missing.
@@ -176,11 +194,17 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 
 		try {
 			$this->repository->create( $connection_option );
+
+			$this->logger->info( 'Create or update connection option command: connection option created.' );
 		} catch ( \Exception $e ) {
 			$this->admin->add_async_processing_notification(
 				'There was a problem updating the Abandoned Cart time, please try saving your settings again.',
 				'error'
 			);
+
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
 
 			return;
 		}
@@ -200,6 +224,10 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 				$this->storage['connection_id']
 			);
 		} catch ( Activecampaign_For_Woocommerce_Resource_Not_Found_Exception $e ) {
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
+
 			$this->connection_option = null;
 		}
 	}
@@ -246,7 +274,11 @@ class Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command 
 			 * an exception, which ends up breaking their store. This try/catch is a stop-gap measure for now.
 			 */
 
-			error_log( (string) $e );
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
+
+			return;
 		}
 
 		$this->update_connection_option_id_cache( $connection_option->get_id() );

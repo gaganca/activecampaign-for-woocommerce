@@ -13,6 +13,8 @@
 use Activecampaign_For_Woocommerce_Executable_Interface as Executable;
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
 
+use AcVendor\Psr\Log\LoggerInterface;
+
 /**
  * The Add_Accepts_Marketing_To_Customer_Meta_Command Class.
  *
@@ -25,6 +27,23 @@ use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
  * @author     acteamintegrations <team-integrations@activecampaign.com>
  */
 class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Command implements Executable {
+
+	/**
+	 * The Logger interface.
+	 *
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	/**
+	 * Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Command constructor.
+	 *
+	 * @param LoggerInterface $logger The Logger interface.
+	 */
+	public function __construct( LoggerInterface $logger ) {
+		$this->logger = $logger;
+	}
+
 	/**
 	 * Executes the command.
 	 *
@@ -47,6 +66,8 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 		$order = $args[0];
 
 		if ( ! $this->nonce_is_valid() ) {
+			$this->logger->debug( 'Invalid checkout nonce' );
+
 			return $order;
 		}
 
@@ -94,7 +115,7 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 	 * Additionally, triggers the customer updated action, which will fire off a
 	 * customer updated webhook.
 	 *
-	 * @param int $id                The id of the user to be updated.
+	 * @param int $id The id of the user to be updated.
 	 * @param int $accepts_marketing The value of the meta field to be updated.
 	 */
 	private function update_user_accepts_marketing( $id, $accepts_marketing ) {
@@ -109,7 +130,7 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 	/**
 	 * Update the order's metadata with the accepts marketing value so it is included in the webhook
 	 *
-	 * @param WC_Order $order             The order.
+	 * @param WC_Order $order The order.
 	 * @param int      $accepts_marketing Value of the checkbox.
 	 */
 	private function update_order_accepts_marketing( $order, $accepts_marketing ) {

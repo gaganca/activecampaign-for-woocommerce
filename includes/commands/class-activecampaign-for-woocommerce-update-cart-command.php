@@ -15,7 +15,9 @@ use Activecampaign_For_Woocommerce_Ecom_Customer_Repository as Ecom_Customer_Rep
 use Activecampaign_For_Woocommerce_Ecom_Order_Factory as Ecom_Order_Factory;
 use Activecampaign_For_Woocommerce_Ecom_Order_Repository as Ecom_Order_Repository;
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
-use GuzzleHttp\Exception\GuzzleException;
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
+
+use AcVendor\Psr\Log\LoggerInterface;
 
 /**
  * Send the cart and its products to ActiveCampaign for the given customer.
@@ -66,6 +68,13 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 	private $admin;
 
 	/**
+	 * The logger interface.
+	 *
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	/**
 	 * Activecampaign_For_Woocommerce_Update_Cart_Command constructor.
 	 *
 	 * @param WC_Cart|null                              $cart The WC Cart.
@@ -74,6 +83,7 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 	 * @param Ecom_Order_Factory                        $factory The Ecom Order Factory.
 	 * @param Ecom_Order_Repository                     $order_repository The Ecom Order Repo.
 	 * @param Ecom_Customer_Repository|null             $customer_repository The Ecom Customer Repo.
+	 * @param LoggerInterface                           $logger The logger interface.
 	 */
 	public function __construct(
 		WC_Cart $cart = null,
@@ -81,7 +91,8 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 		Admin $admin,
 		Ecom_Order_Factory $factory,
 		Ecom_Order_Repository $order_repository,
-		Ecom_Customer_Repository $customer_repository
+		Ecom_Customer_Repository $customer_repository,
+		LoggerInterface $logger = null
 	) {
 		$this->cart                = $cart;
 		$this->customer            = $customer;
@@ -89,6 +100,7 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 		$this->order_repository    = $order_repository;
 		$this->customer_repository = $customer_repository;
 		$this->admin               = $admin;
+		$this->logger              = $logger;
 	}
 
 	/**
@@ -99,6 +111,8 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 		$this->cart     = $this->cart ?: wc()->cart;
 		$this->customer = $this->customer ?: wc()->customer;
 	}
+
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 
 	/**
 	 * {@inheritDoc}
@@ -115,6 +129,8 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 
 		// First, make sure we have the ID for the ActiveCampaign customer record
 		if ( ! $this->verify_ac_customer_id( $this->customer->get_id() ) ) {
+			$this->logger->info( 'Create and save cart id: Missing id for ActiveCampaign customer record.' );
+
 			return;
 		}
 
@@ -140,9 +156,12 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 			 * an exception, which ends up breaking their store. This try/catch is a stop-gap measure for now.
 			 */
 
-			error_log( (string) $e );
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
 		}
 	}
+	// phpcs:enable
 
 	/**
 	 * Try and find the AC customer ID in the local DB. If not found, create the customer
@@ -164,10 +183,18 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 			 *
 			 * @var Activecampaign_For_Woocommerce_Ecom_Customer $customer_from_hosted
 			 */
-			$ecom_customer = $this->customer_repository->find_by_email( $this->customer->get_email() );
+			$ecom_customer = $this->customer_repository->find_by_email_and_connection_id( $this->customer->get_email(), $this->admin->get_storage()['connection_id'] );
 		} catch ( GuzzleException $e ) {
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
+
 			return false;
 		} catch ( \Exception $e ) {
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
+
 			return false;
 		}
 

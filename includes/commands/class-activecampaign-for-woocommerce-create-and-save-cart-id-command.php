@@ -13,6 +13,8 @@
 use Activecampaign_For_Woocommerce_Executable_Interface as Executable;
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
 
+use AcVendor\Psr\Log\LoggerInterface;
+
 /**
  * The Create_And_Save_Cart_Id_Command Class.
  *
@@ -22,6 +24,24 @@ use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
  * @author     acteamintegrations <team-integrations@activecampaign.com>
  */
 class Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command implements Executable {
+	/**
+	 * The Logger interface.
+	 *
+	 * @var LoggerInterface
+	 */
+	private $logger;
+
+	/**
+	 * Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command constructor.
+	 *
+	 * @param LoggerInterface $logger The Logger interface.
+	 */
+	public function __construct( LoggerInterface $logger = null ) {
+		$this->logger = $logger;
+	}
+
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
+
 	/**
 	 * Executes the command.
 	 *
@@ -36,6 +56,8 @@ class Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command implements 
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
+			$this->logger->info( 'Create and save cart id: missing user id' );
+
 			return;
 		}
 
@@ -46,10 +68,12 @@ class Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command implements 
 		 * If there's an existing cart id, return early.
 		 */
 		if ( '' !== $current_cart_id ) {
+			$this->logger->info( 'Create and save cart id: cart already exists' );
+
 			return;
 		}
 
 		User_Meta_Service::set_current_cart_id( $user_id );
 	}
-
+	// phpcs:enable
 }

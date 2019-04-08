@@ -21,6 +21,8 @@ use Activecampaign_For_Woocommerce_Api_Client as Api_Client;
 use Activecampaign_For_Woocommerce_Cart_Emptied_Event as Cart_Emptied;
 use Activecampaign_For_Woocommerce_Cart_Updated_Event as Cart_Updated;
 use Activecampaign_For_Woocommerce_Clear_User_Meta_Command as Clear_User_Meta_Command;
+use Activecampaign_For_Woocommerce_Connection_Option_Repository as Connection_Option_Repository;
+use Activecampaign_For_Woocommerce_Connection_Repository as Connection_Repository;
 use Activecampaign_For_Woocommerce_Create_Or_Update_Connection_Option_Command as Create_Or_Update_Connection_Option_Command;
 use Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command as Create_And_Save_Cart_Id;
 use Activecampaign_For_Woocommerce_Delete_Cart_Id_Command as Delete_Cart_Id;
@@ -29,14 +31,16 @@ use Activecampaign_For_Woocommerce_Ecom_Order_Factory as Ecom_Order_Factory;
 use Activecampaign_For_Woocommerce_Ecom_Order_Repository as Ecom_Order_Repository;
 use Activecampaign_For_Woocommerce_I18n as I18n;
 use Activecampaign_For_Woocommerce_Loader as Loader;
+use Activecampaign_For_Woocommerce_Logger as Log;
 use Activecampaign_For_Woocommerce_Public as AC_Public;
 use Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command as Set_Connection_Id_Cache_Command;
 use Activecampaign_For_Woocommerce_Update_Cart_Command as Update_Cart_Command;
 use Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command as Sync_Guest_Abandoned_Cart_Command;
-use Psr\Container\ContainerInterface;
+use AcVendor\Psr\Container\ContainerInterface;
+use AcVendor\Psr\Log\LoggerInterface;
 
 return array(
-	Activecampaign_For_Woocommerce::class    => function (
+	Activecampaign_For_Woocommerce::class             => function (
 		Loader $loader,
 		Admin $admin,
 		AC_Public $public,
@@ -82,7 +86,11 @@ return array(
 		);
 	},
 
-	Admin::class                             => function ( ContainerInterface $c ) {
+	Add_Accepts_Marketing_To_Customer_Meta::class     => function ( LoggerInterface $logger ) {
+		return new Add_Accepts_Marketing_To_Customer_Meta( $logger );
+	},
+
+	Admin::class                                      => function ( ContainerInterface $c ) {
 		$version = defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ?
 			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION :
 			'1.0.0';
@@ -98,7 +106,7 @@ return array(
 		return new Admin( $plugin_name, $version, $validator, $event );
 	},
 
-	Api_Client::class                        => function () {
+	Api_Client::class                                 => function () {
 		$settings = get_option( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_OPTION_NAME );
 
 		$api_uri = isset( $settings['api_url'] ) ? $settings['api_url'] : null;
@@ -107,7 +115,7 @@ return array(
 		return new Api_Client( $api_uri, $api_key );
 	},
 
-	AC_Public::class                         => function ( Admin $admin ) {
+	AC_Public::class                                  => function ( Admin $admin ) {
 		$version = defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ?
 			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION :
 			'1.0.0';
@@ -119,11 +127,24 @@ return array(
 		return new AC_Public( $plugin_name, $version, $admin );
 	},
 
-	Update_Cart_Command::class               => function (
+	Create_And_Save_Cart_Id::class                    => function ( LoggerInterface $logger ) {
+		return new Create_And_Save_Cart_Id( $logger );
+	},
+
+	Create_Or_Update_Connection_Option_Command::class => function (
+		Admin $admin,
+		Connection_Option_Repository $repository,
+		LoggerInterface $logger
+	) {
+		return new Create_Or_Update_Connection_Option_Command( $admin, $repository, null, $logger );
+	},
+
+	Update_Cart_Command::class                        => function (
 		Admin $admin,
 		Ecom_Order_Factory $factory,
 		Ecom_Order_Repository $order_repository,
-		Ecom_Customer_Repository $customer_repository
+		Ecom_Customer_Repository $customer_repository,
+		LoggerInterface $logger
 	) {
 		return new Update_Cart_Command(
 			null,
@@ -131,11 +152,20 @@ return array(
 			$admin,
 			$factory,
 			$order_repository,
-			$customer_repository
+			$customer_repository,
+			$logger
 		);
 	},
 
-	Sync_Guest_Abandoned_Cart_Command::class => function (
+	Set_Connection_Id_Cache_Command::class            => function (
+		Admin $admin,
+		Connection_Repository $connection_repository,
+		LoggerInterface $logger
+	) {
+		return new Set_Connection_Id_Cache_Command( $admin, $connection_repository, $logger );
+	},
+
+	Sync_Guest_Abandoned_Cart_Command::class          => function (
 		Admin $admin,
 		Ecom_Order_Factory $factory,
 		Ecom_Order_Repository $order_repository,
@@ -151,4 +181,11 @@ return array(
 			$customer_repository
 		);
 	},
+
+	LoggerInterface::class                            => AcVendor\DI\factory(
+		function () {
+			return new Log();
+		}
+	),
+
 );

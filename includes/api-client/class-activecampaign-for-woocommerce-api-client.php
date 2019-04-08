@@ -13,7 +13,7 @@
  * @subpackage Activecampaign_For_Woocommerce/includes/api-client
  */
 
-use GuzzleHttp\Client;
+use AcVendor\GuzzleHttp\Client;
 
 /**
  * The main API Client class.

@@ -17,6 +17,8 @@ use Activecampaign_For_Woocommerce_Connection_Repository as Repository;
 use Activecampaign_For_Woocommerce_Executable_Interface as Executable;
 use Activecampaign_For_Woocommerce_Resource_Not_Found_Exception as Resource_Not_Found;
 
+use AcVendor\Psr\Log\LoggerInterface;
+
 /**
  * The Set Connection Id Cache Command Class.
  *
@@ -42,21 +44,29 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 	 */
 	private $admin;
 
+	/**
+	 * The logger interface.
+	 *
+	 * @var LoggerInterface
+	 */
+	private $logger;
 
 	/**
 	 * Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command constructor.
 	 *
-	 * @throws Exception Thrown when the container definitions are missing.
-	 * @since 1.0.0
+	 * @param Admin                $admin The admin singleton instance.
+	 * @param Repository           $repository The connection repository instance.
+	 * @param LoggerInterface|null $logger The Logger interface.
 	 *
-	 * @param Admin      $admin The admin singleton instance.
-	 * @param Repository $repository The connection repository instance.
+	 * @since 1.0.0
 	 */
-	public function __construct( Admin $admin, Repository $repository ) {
+	public function __construct( Admin $admin, Repository $repository, LoggerInterface $logger = null ) {
 		$this->repository = $repository;
 		$this->admin      = $admin;
+		$this->logger     = $logger;
 	}
 
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 	/**
 	 * Executes the command.
 	 *
@@ -68,6 +78,7 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 	 * @since 1.0.0
 	 */
 	public function execute( ...$args ) {
+
 		/**
 		 * The Connection model.
 		 *
@@ -88,6 +99,7 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 			]
 		);
 	}
+	// phpcs:enable
 
 	/**
 	 * Returns the connection model from the API.
@@ -106,12 +118,18 @@ class Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command implements 
 			 * @var Connection $connection
 			 * @since 1.0.0
 			 */
+
 			$connection = $this->repository->find_current();
 		} catch ( Resource_Not_Found $e ) {
+
 			$this->admin->add_async_processing_notification(
 				$this->formatted_error_text(),
 				'warning'
 			);
+
+			$message     = $e->getMessage();
+			$stack_trace = $e->getTrace();
+			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
 		}
 
 		return $connection;

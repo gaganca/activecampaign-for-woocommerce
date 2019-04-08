@@ -6,13 +6,14 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
-    'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
-    'PhpDocReader\\' => array($vendorDir . '/php-di/phpdoc-reader/src/PhpDocReader'),
-    'Invoker\\' => array($vendorDir . '/php-di/invoker/src'),
-    'Interop\\Container\\' => array($vendorDir . '/container-interop/container-interop/src/Interop/Container'),
-    'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
-    'GuzzleHttp\\Promise\\' => array($vendorDir . '/guzzlehttp/promises/src'),
-    'GuzzleHttp\\' => array($vendorDir . '/guzzlehttp/guzzle/src'),
-    'DI\\' => array($vendorDir . '/php-di/php-di/src/DI'),
+    'AcVendor\\Psr\\Log\\' => array($baseDir . '/ac_vendor/psr/log/Psr/Log'),
+    'AcVendor\\Psr\\Http\\Message\\' => array($baseDir . '/ac_vendor/psr/http-message/src'),
+    'AcVendor\\Psr\\Container\\' => array($baseDir . '/ac_vendor/psr/container/src'),
+    'AcVendor\\PhpDocReader\\' => array($baseDir . '/ac_vendor/php-di/phpdoc-reader/src'),
+    'AcVendor\\Invoker\\' => array($baseDir . '/ac_vendor/php-di/invoker/src'),
+    'AcVendor\\Interop\\Container\\' => array($baseDir . '/ac_vendor/container-interop/container-interop/src/Interop/Container'),
+    'AcVendor\\GuzzleHttp\\Psr7\\' => array($baseDir . '/ac_vendor/guzzlehttp/psr7/src'),
+    'AcVendor\\GuzzleHttp\\Promise\\' => array($baseDir . '/ac_vendor/guzzlehttp/promises/src'),
+    'AcVendor\\GuzzleHttp\\' => array($baseDir . '/ac_vendor/guzzlehttp/guzzle/src'),
+    'AcVendor\\DI\\' => array($baseDir . '/ac_vendor/php-di/php-di/src/DI'),
 );

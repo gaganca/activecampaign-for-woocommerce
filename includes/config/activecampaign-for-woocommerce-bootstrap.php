@@ -32,7 +32,7 @@ require_once __DIR__ . '/activecampaign-for-woocommerce-global-constants.php';
  */
 function activecampaign_for_woocommerce_build_container() {
 
-	$builder = new DI\ContainerBuilder();
+	$builder = new AcVendor\DI\ContainerBuilder();
 	$builder->addDefinitions(
 		__DIR__ . '/activecampaign-for-woocommerce-class-factories.php'
 	);

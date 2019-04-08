@@ -17,7 +17,7 @@ use Activecampaign_For_Woocommerce_Ecom_Order_Factory as Ecom_Order_Factory;
 use Activecampaign_For_Woocommerce_Ecom_Order_Repository as Ecom_Order_Repository;
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
 use Activecampaign_For_Woocommerce_Logger as Logger;
-use GuzzleHttp\Exception\GuzzleException;
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Handles sending the guest customer and pending order to AC.
@@ -168,6 +168,7 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 		$this->logger     = $this->logger ?: new Logger();
 	}
 
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 	/**
 	 * Execute this command.
 	 *
@@ -207,6 +208,7 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 
 		return true;
 	}
+	// phpcs:enable
 
 	/**
 	 * Generate the externalcheckoutid hash which
@@ -273,16 +275,17 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 */
 	private function find_or_create_ac_customer() {
 		$this->customer_ac = null;
+		$connection_id     = $this->admin->get_storage()['connection_id'];
 
 		try {
 			// Try to find the customer in AC
-			$this->customer_ac = $this->customer_repository->find_by_email( $this->customer_email );
+			$this->customer_ac = $this->customer_repository->find_by_email_and_connection_id( $this->customer_email, $connection_id );
 		} catch ( Activecampaign_For_Woocommerce_Resource_Not_Found_Exception $e ) {
 			// Customer does not exist in AC yet
 			// Set up AC customer model
 			$new_customer = new Ecom_Customer();
 			$new_customer->set_email( $this->customer_email );
-			$new_customer->set_connectionid( $this->admin->get_storage()['connection_id'] );
+			$new_customer->set_connectionid( $connection_id );
 
 			try {
 				// Try to create the new customer in AC

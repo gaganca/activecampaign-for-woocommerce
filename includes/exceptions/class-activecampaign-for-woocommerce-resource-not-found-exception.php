@@ -28,7 +28,7 @@ class Activecampaign_For_Woocommerce_Resource_Not_Found_Exception extends Except
 	 * @param null   $previous The previous exception.
 	 */
 	public function __construct( $message = '', $context = [], $code = 0, $previous = null ) {
-		$message .= ' ' . \GuzzleHttp\json_encode( $context );
+		$message .= ' ' . AcVendor\GuzzleHttp\json_encode( $context );
 		parent::__construct( $message, $code, $previous );
 	}
 }

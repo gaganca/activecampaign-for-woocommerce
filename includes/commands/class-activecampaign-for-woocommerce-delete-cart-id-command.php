@@ -22,6 +22,7 @@ use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
  * @author     acteamintegrations <team-integrations@activecampaign.com>
  */
 class Activecampaign_For_Woocommerce_Delete_Cart_Id_Command implements Executable {
+	// phpcs:disable Generic.CodeAnalysis.UnusedFunctionParameter
 	/**
 	 * Executes the command.
 	 *
@@ -40,4 +41,5 @@ class Activecampaign_For_Woocommerce_Delete_Cart_Id_Command implements Executabl
 
 		User_Meta_Service::delete_current_cart_id( $user_id );
 	}
+	// phpcs:enable
 }

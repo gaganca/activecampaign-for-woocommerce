@@ -6,8 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'a0edc8309cc5e1d60e3047b5df6b7052' => $vendorDir . '/guzzlehttp/psr7/src/functions_include.php',
-    'c964ee0ededf28c96ebd9db5099ef910' => $vendorDir . '/guzzlehttp/promises/src/functions_include.php',
-    '37a3dc5111fe8f707ab4c132ef1dbc62' => $vendorDir . '/guzzlehttp/guzzle/src/functions_include.php',
-    'bbf73f3db644d3dced353b837903e74c' => $vendorDir . '/php-di/php-di/src/DI/functions.php',
+    '3235689ae520774249788ae5d5475c84' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/functions_include.php',
+    '08353eb221df9ff6894dace79db82c3b' => $baseDir . '/ac_vendor/guzzlehttp/promises/src/functions_include.php',
+    '19f4cbff4b7576260ebaf7e81f2d5b1f' => $baseDir . '/ac_vendor/guzzlehttp/psr7/src/functions_include.php',
+    '779315aa08574944fb6c4d2ca9e7132b' => $baseDir . '/ac_vendor/php-di/php-di/src/DI/Container.php',
+    '275cdeae0a0b233cf2f6c151b81d41c7' => $baseDir . '/ac_vendor/php-di/php-di/src/DI/ContainerBuilder.php',
+    '03744023bb0c65527553d487b84e3d27' => $baseDir . '/ac_vendor/php-di/php-di/src/DI/functions.php',
+    '164b067373632bcad8fd2c4a76f967ae' => $baseDir . '/ac_vendor/ralouphie/getallheaders/src/getallheaders.php',
 );

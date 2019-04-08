@@ -16,7 +16,7 @@
  * @since 1.0.0
  */
 if ( ! defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION' ) ) {
-	define( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION', '1.2.1' );
+	define( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_VERSION', '1.2.2' );
 }
 
 /**
@@ -87,4 +87,14 @@ if ( ! defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_STORAGE_NAME' ) ) {
  */
 if ( ! defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME' ) ) {
 	define( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME', 'activecampaign_for_woocommerce_persistent_cart_id' );
+}
+
+/**
+ * Path to the log file.
+ *
+ * @var string The path to our plugin-specific log file.
+ * @since 1.2.0
+ */
+if ( ! defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOG_PATH' ) ) {
+	define( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOG_PATH', WP_CONTENT_DIR . '/uploads/wc-logs/ac-debug.log' );
 }

@@ -115,13 +115,31 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	 * Finds a resource by its email and returns an instantiated model with the resource's data.
 	 *
 	 * @param string $email The email to find the resource by.
+	 * @param string $connection_id The connection ID for the woocommerce integration.
 	 *
 	 * @return Ecom_Model
 	 * @throws Activecampaign_For_Woocommerce_Resource_Not_Found_Exception A 404 response.
-	 * @throws \GuzzleHttp\Exception\GuzzleException A general Guzzle exception.
 	 */
-	public function find_by_email( $email ) {
-		return $this->find_by_filter( 'email', $email );
+	public function find_by_email_and_connection_id( $email, $connection_id ) {
+		$ecom_order_model = new Ecom_Customer();
+
+		$result_array = $this->get_result_set_from_api_by_filter(
+			$this->client,
+			'email',
+			$email
+		);
+		$result       = array_filter(
+			$result_array,
+			function( $result ) use ( $connection_id ) {
+				return $result['connectionid'] === $connection_id;
+			}
+		);
+
+		if ( empty( $result ) ) {
+			throw new Activecampaign_For_Woocommerce_Resource_Not_Found_Exception();
+		}
+
+		return $ecom_order_model->set_properties_from_serialized_array( array_values( $result )[0] );
 	}
 
 	/**

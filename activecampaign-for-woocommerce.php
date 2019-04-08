@@ -16,7 +16,7 @@
  * Plugin Name:       ActiveCampaign for WooCommerce
  * Plugin URI:        https://www.activecampaign.com/
  * Description:       Add Abandoned Cart functionality to your WooCommerce store using ActiveCampaign.
- * Version:           1.2.1
+ * Version:           1.2.2
  * Author:            ActiveCampaign
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
@@ -24,7 +24,7 @@
  * Domain Path:       /languages
  */
 
-use DI\Container;
+use AcVendor\DI\Container;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -58,6 +58,9 @@ if ( ! defined( 'ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PLUGIN_BASE_NAME' ) ) {
  * @since 1.0.0
  */
 function activecampaign_for_woocommerce_activate() {
+	if ( ! activecampaign_for_woocommerce_should_load() ) {
+		wp_die( 'ActiveCampaign for WooCommerce requires WooCommerce to be installed and activated.' );
+	}
 	$activator = activecampaign_for_woocommerce_build_container()->get( Activecampaign_For_Woocommerce_Activator::class );
 	$activator->activate();
 }
@@ -86,10 +89,65 @@ register_deactivation_hook( __FILE__, 'activecampaign_for_woocommerce_deactivate
  * @since    1.0.0
  *
  * @param Container $container The PHP DI container instance.
+ *
+ * @throws \DI\DependencyException Dependency exception.
+ * @throws \DI\NotFoundException Not found exception.
  */
 function activecampaign_for_woocommerce_run( Container $container ) {
 	$plugin = $container->get( Activecampaign_For_Woocommerce::class );
 	$plugin->run();
+}
+
+/**
+ * WooCommerce dependency alert.
+ *
+ * Alert the administrator if WooCommerce is unavailable.
+ *
+ * @since __NEXT__
+ *
+ * @return void
+ */
+function activecampaign_for_woocommerce_alert_woocommerce_not_available() {
+	echo "<div class='notice notice-error'><p>The ActiveCampaign for WooCommerce plugin is not available because WooCommerce is either not installed or not activated. Please install and activate WooCommerce.</p></div>";
+}
+
+/**
+ * I'm the decider
+ *
+ * Should the plugin load or not? Dependency checks go here.
+ *
+ * @since __NEXT__
+ *
+ * @return bool True or false.
+ */
+function activecampaign_for_woocommerce_should_load() {
+	if ( ! defined( 'WC_PLUGIN_FILE' ) ) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Late loader
+ *
+ * WordPress loads plugins in alphabetical order. This plugin **MUST** be
+ * loaded *after* WooCommerce. Defining this function allows us to use the
+ * `plugins_loaded` hook to manually load this plugin after WooCommerce is
+ * loaded.
+ *
+ * @throws \DI\DependencyException Dependency exception.
+ * @throws \DI\NotFoundException Not found exception.
+ *
+ * @return void
+ */
+function activecampaign_for_woocommerce_late_loader() {
+	if ( ! activecampaign_for_woocommerce_should_load() ) {
+		add_action( 'admin_notices', 'activecampaign_for_woocommerce_alert_woocommerce_not_available' );
+
+		return;
+	}
+	activecampaign_for_woocommerce_run( activecampaign_for_woocommerce_build_container() );
 }
 
 /**
@@ -98,5 +156,5 @@ function activecampaign_for_woocommerce_run( Container $container ) {
  * bootstrap file sets TESTING=1 to the environment to disable this.
  */
 if ( ! getenv( 'TESTING' ) ) {
-	activecampaign_for_woocommerce_run( activecampaign_for_woocommerce_build_container() );
+	add_action( 'plugins_loaded', 'activecampaign_for_woocommerce_late_loader' );
 }
