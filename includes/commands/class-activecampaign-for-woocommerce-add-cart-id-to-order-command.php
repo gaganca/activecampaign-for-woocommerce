@@ -48,32 +48,62 @@ class Activecampaign_For_Woocommerce_Add_Cart_Id_To_Order_Command implements Exe
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
-			$externalcheckoutid = Sync_Guest_Abandoned_Cart_Command::generate_externalcheckoutid(
+			// Guest checkout
+			$persistant_cart_id_name = Sync_Guest_Abandoned_Cart_Command::generate_externalcheckoutid(
 				wc()->session->get_customer_id(),
 				$order->get_billing_email()
 			);
+		} else {
+			// Registered user (customer) checkout
 
-			$order->update_meta_data(
-				ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME,
-				$externalcheckoutid
-			);
+			/**
+			 * Delete the local cache of Hosted's order/cart ID so it isn't used
+			 * erroneously on the next order this user places.
+			 */
+			User_Meta_Service::delete_current_cart_ac_id( $user_id );
 
-			return $order;
+			$cart_id = User_Meta_Service::get_current_cart_id( $user_id );
+
+			if ( $cart_id ) {
+				// Registered user (customer) initiated cart and completed checkout
+				$persistant_cart_id_name = $cart_id;
+			} else {
+				// Registered user (customer) only completed checkout (guest initiated cart)
+
+				/**
+				 * In this case we have a user ID but no cart ID.
+				 * This means a guest placed an order and converted
+				 * to a customer during checkout.
+				 *
+				 * Example session cookie:
+				 *
+				 * Array
+				 * (
+				 *   [0] => 4a342d38b872b7ce2ab15d6f420aa80d
+				 *   [1] => 1558289976
+				 *   [2] => 1558286376
+				 *   [3] => 69070d73cd7950bb08352af7f7ee4cc2
+				 * )
+				 *
+				 * The first item is used to generate the externalcheckoutid so
+				 * Hosted knows to convert the pending order to completed.
+				 */
+				$woocommerce_session_cookie = wc()->session->get_session_cookie();
+
+				$woocommerce_session_hash = $woocommerce_session_cookie[0];
+
+				$persistant_cart_id_name = Sync_Guest_Abandoned_Cart_Command::generate_externalcheckoutid(
+					$woocommerce_session_hash,
+					$order->get_billing_email()
+				);
+			}
 		}
 
-		/**
-		 * Delete the local cache of Hosted's order/cart ID so it isn't used
-		 * erroneously on the next order this user places.
-		 */
-		User_Meta_Service::delete_current_cart_ac_id( $user_id );
-
-		$cart_id = User_Meta_Service::get_current_cart_id( $user_id );
-
-		if ( ! $cart_id ) {
-			return $order;
-		}
-
-		$order->update_meta_data( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME, $cart_id );
+		// This ends up as the externalcheckoutid in Hosted
+		$order->update_meta_data(
+			ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PERSISTANT_CART_ID_NAME,
+			$persistant_cart_id_name
+		);
 
 		return $order;
 	}
