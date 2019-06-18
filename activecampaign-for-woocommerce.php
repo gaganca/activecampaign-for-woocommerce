@@ -13,15 +13,17 @@
  * @package           Activecampaign_For_Woocommerce
  *
  * @wordpress-plugin
- * Plugin Name:       ActiveCampaign for WooCommerce
- * Plugin URI:        https://www.activecampaign.com/
- * Description:       Add Abandoned Cart functionality to your WooCommerce store using ActiveCampaign.
- * Version:           1.2.3
- * Author:            ActiveCampaign
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       activecampaign-for-woocommerce
- * Domain Path:       /languages
+ * Plugin Name:          ActiveCampaign for WooCommerce
+ * Plugin URI:           https://www.activecampaign.com/
+ * Description:          Add Abandoned Cart functionality to your WooCommerce store using ActiveCampaign.
+ * Version:              1.2.4
+ * Author:               ActiveCampaign
+ * License:              GPL-2.0+
+ * License URI:          http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain:          activecampaign-for-woocommerce
+ * Domain Path:          /languages
+ * WC requires at least: 3.0.0
+ * WC tested up to:      3.6.0
  */
 
 use AcVendor\DI\Container;
