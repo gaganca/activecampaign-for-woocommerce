@@ -14,6 +14,8 @@
  */
 
 use AcVendor\GuzzleHttp\Client;
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
+use AcVendor\Psr\Http\Message\ResponseInterface;
 
 /**
  * The main API Client class.
@@ -352,8 +354,8 @@ class Activecampaign_For_Woocommerce_Api_Client {
 	 * First creates a filtered endpoint, and then passes that endpoint to the Guzzle
 	 * Client. This client then handles making the actual request.
 	 *
-	 * @return \Psr\Http\Message\ResponseInterface
-	 * @throws \GuzzleHttp\Exception\GuzzleException Thrown when a non-200/300 response is received.
+	 * @return ResponseInterface
+	 * @throws GuzzleException Thrown when a non-200/300 response is received.
 	 * @since      1.0.0
 	 */
 	public function execute() {

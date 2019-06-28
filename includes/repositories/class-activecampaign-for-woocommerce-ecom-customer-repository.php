@@ -16,6 +16,7 @@ use Activecampaign_For_Woocommerce_Ecom_Customer as Ecom_Customer;
 use Activecampaign_For_Woocommerce_Ecom_Model_Interface as Ecom_Model;
 use Activecampaign_For_Woocommerce_Interacts_With_Api as Interacts_With_Api;
 use Activecampaign_For_Woocommerce_Repository_Interface as Repository;
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
 
 
 /**
@@ -64,7 +65,7 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	 *
 	 * @return Ecom_Model
 	 * @throws Activecampaign_For_Woocommerce_Resource_Not_Found_Exception A 404 response.
-	 * @throws \GuzzleHttp\Exception\GuzzleException A general Guzzle exception.
+	 * @throws GuzzleException A general Guzzle Exception.
 	 */
 	public function find_by_id( $id ) {
 		/**
@@ -86,12 +87,12 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	/**
 	 * Finds a resource by a filtered list response and returns an instantiated model with the resource's data.
 	 *
-	 * @param string $filter_name  The filter name.
+	 * @param string $filter_name The filter name.
 	 * @param string $filter_value The filter value.
 	 *
 	 * @return Ecom_Model
 	 * @throws Activecampaign_For_Woocommerce_Resource_Not_Found_Exception A 404 response.
-	 * @throws \GuzzleHttp\Exception\GuzzleException A general Guzzle exception.
+	 * @throws GuzzleException A general Guzzle Exception.
 	 */
 	public function find_by_filter( $filter_name, $filter_value ) {
 		/**
@@ -149,7 +150,7 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	 *
 	 * @return Ecom_Model
 	 * @throws Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception A 422 exception.
-	 * @throws \GuzzleHttp\Exception\GuzzleException A general Guzzle exception.
+	 * @throws GuzzleException A general Guzzle exception.
 	 */
 	public function create( Ecom_Model $model ) {
 		$this->create_and_set_model_properties_from_api(
@@ -168,7 +169,7 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	 * @return Ecom_Model
 	 * @throws Activecampaign_For_Woocommerce_Resource_Not_Found_Exception A 404 exception.
 	 * @throws Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception A 422 exception.
-	 * @throws \GuzzleHttp\Exception\GuzzleException A general Guzzle exception.
+	 * @throws GuzzleException A general Guzzle exception.
 	 */
 	public function update( Ecom_Model $model ) {
 		$this->update_and_set_model_properties_from_api(

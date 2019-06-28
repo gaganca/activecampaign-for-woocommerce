@@ -9,6 +9,9 @@
  * @subpackage Activecampaign_For_Woocommerce/includes/traits
  */
 
+use AcVendor\GuzzleHttp\Exception\GuzzleException;
+use AcVendor\Psr\Http\Message\StreamInterface;
+
 /**
  * Trait Activecampaign_For_Woocommerce_Interacts_With_Api
  *
@@ -47,7 +50,7 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 					'found_by' => 'id',
 					'value'    => $id,
 				],
-				$e->getResponse()->getStatusCode(),
+				$e->getResponse() ? $e->getResponse()->getStatusCode() : '',
 				$e
 			);
 		}
@@ -174,6 +177,9 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 					'resource' => self::RESOURCE_NAME,
 					'found_by' => $filter_name,
 					'value'    => $filter_value,
+					'response' => $result->getBody() instanceof StreamInterface
+						? $result->getBody()->getContents()
+						: null,
 				],
 				404
 			);
@@ -221,10 +227,13 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 				[
 					'resource' => self::RESOURCE_NAME,
 					'context'  => $body_as_string,
-					'response' => $e->getResponse()->getBody(),
-					$e->getTraceAsString(),
+					'response' => $e->getResponse()
+						? $e->getResponse()->getBody()->getContents()
+						: '',
+					// Make sure the trace ends up in the logs
+					'trace'    => $e->getTraceAsString(),
 				],
-				$e->getResponse()->getStatusCode(),
+				$e->getResponse() ? $e->getResponse()->getStatusCode() : '',
 				$e
 			);
 		}
@@ -278,22 +287,29 @@ trait Activecampaign_For_Woocommerce_Interacts_With_Api {
 						'resource' => self::RESOURCE_NAME,
 						'found_by' => 'id',
 						'value'    => $model->get_id(),
+						'response' => $e->getResponse()
+							? $e->getResponse()->getBody()->getContents()
+							: '',
+						// Make sure the trace ends up in the logs
+						'trace'    => $e->getTraceAsString(),
 					],
-					$e->getResponse()->getStatusCode(),
-					$e
-				);
-			} else {
-				throw new Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception(
-					'The resource was unprocessable.',
-					[
-						'resource' => self::RESOURCE_NAME,
-						'context'  => $body_as_string,
-						'response' => $e->getResponse()->getBody(),
-					],
-					$e->getResponse()->getStatusCode(),
+					$e->getResponse() ? $e->getResponse()->getStatusCode() : '',
 					$e
 				);
 			}
+
+			throw new Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception(
+				'The resource was unprocessable.',
+				[
+					'resource' => self::RESOURCE_NAME,
+					'context'  => $body_as_string,
+					'response' => $e->getResponse()
+						? $e->getResponse()->getBody()->getContents()
+						: '',
+				],
+				$e->getResponse() ? $e->getResponse()->getStatusCode() : '',
+				$e
+			);
 		}
 
 		$resource_array = AcVendor\GuzzleHttp\json_decode( $result->getBody(), true );

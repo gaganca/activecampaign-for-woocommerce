@@ -129,7 +129,13 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 
 		// First, make sure we have the ID for the ActiveCampaign customer record
 		if ( ! $this->verify_ac_customer_id( $this->customer->get_id() ) ) {
-			$this->logger->info( 'Create and save cart id: Missing id for ActiveCampaign customer record.' );
+			$this->logger->info(
+				'Create and save cart id: Missing id for ActiveCampaign customer record.',
+				[
+					'customer_email' => $this->customer->get_email(),
+					'customer_id'    => $this->customer->get_id(),
+				]
+			);
 
 			return;
 		}
@@ -183,7 +189,10 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 			 *
 			 * @var Activecampaign_For_Woocommerce_Ecom_Customer $customer_from_hosted
 			 */
-			$ecom_customer = $this->customer_repository->find_by_email_and_connection_id( $this->customer->get_email(), $this->admin->get_storage()['connection_id'] );
+			$ecom_customer = $this->customer_repository->find_by_email_and_connection_id(
+				$this->customer->get_email(),
+				$this->admin->get_storage()['connection_id']
+			);
 		} catch ( GuzzleException $e ) {
 			$message     = $e->getMessage();
 			$stack_trace = $e->getTrace();
