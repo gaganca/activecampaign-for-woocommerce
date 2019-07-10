@@ -3,7 +3,7 @@ Contributors: acteamintegrations, bartboy011
 Tags: marketing, ecommerce, woocommerce, email, activecampaign, abandoned cart
 Requires at least: 4.7
 Tested up to: 5.2.1
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -40,6 +40,9 @@ Installation
 10. Click "Update Settings".
 
 == Changelog ==
+
+= 1.2.6 =
+* Fixed incompatibility with Aero Checkout plugin
 
 = 1.2.5 =
 * Added more info to logs. Fixed imports and doc blocks.
