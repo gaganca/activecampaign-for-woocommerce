@@ -44,6 +44,11 @@
 		);
 	}
 
+	// If this was stubbed in a test, use the stub
+	if (typeof window.sync_guest_abandoned_cart_wait_set !== 'undefined') {
+		var sync_guest_abandoned_cart_wait_set = window.sync_guest_abandoned_cart_wait_set;
+	}
+
 	/**
 	 * Kick off the Ajax request to sync the guest
 	 * abandoned cart to the AC account.
@@ -66,7 +71,7 @@
 	}
 
 	$( document ).ready(function() {
-		$( '.woocommerce-billing-fields #billing_email' ).keyup(function() {
+		$( '.woocommerce-checkout #billing_email' ).keyup(function() {
 			var billing_email_value = $( this ).val();
 
 			var billing_email_val_not_empty = billing_email_value !== '';
