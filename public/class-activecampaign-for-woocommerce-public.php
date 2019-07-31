@@ -10,7 +10,6 @@
  */
 
 use Activecampaign_For_Woocommerce_Admin as Admin;
-
 use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
 
 /**
@@ -91,7 +90,8 @@ class Activecampaign_For_Woocommerce_Public {
 		wp_register_script(
 			$this->plugin_name,
 			plugin_dir_url( __FILE__ ) . 'js/activecampaign-for-woocommerce-public.js',
-			array( 'jquery' )
+			array( 'jquery' ),
+			$this->version
 		);
 
 		$sync_guest_abandoned_cart_nonce = wp_create_nonce( 'sync_guest_abandoned_cart_nonce' );
@@ -104,13 +104,7 @@ class Activecampaign_For_Woocommerce_Public {
 			)
 		);
 
-		wp_enqueue_script(
-			$this->plugin_name,
-			plugin_dir_url( __FILE__ ) . 'js/activecampaign-for-woocommerce-public.js',
-			array( 'jquery' ),
-			$this->version,
-			false
-		);
+		wp_enqueue_script( $this->plugin_name );
 	}
 
 	/**
