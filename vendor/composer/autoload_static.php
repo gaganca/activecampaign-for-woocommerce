@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit17617d2c67634767994bfaf95d242ff8
+class ComposerStaticInit1cbf2d3f95de901f2a1d5fce149681b2
 {
     public static $files = array (
         '3235689ae520774249788ae5d5475c84' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/functions_include.php',
@@ -147,6 +147,7 @@ class ComposerStaticInit17617d2c67634767994bfaf95d242ff8
         'AcVendor\\GuzzleHttp\\Exception\\ClientException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ClientException.php',
         'AcVendor\\GuzzleHttp\\Exception\\ConnectException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ConnectException.php',
         'AcVendor\\GuzzleHttp\\Exception\\GuzzleException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/GuzzleException.php',
+        'AcVendor\\GuzzleHttp\\Exception\\InvalidArgumentException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/InvalidArgumentException.php',
         'AcVendor\\GuzzleHttp\\Exception\\RequestException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/RequestException.php',
         'AcVendor\\GuzzleHttp\\Exception\\SeekException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/SeekException.php',
         'AcVendor\\GuzzleHttp\\Exception\\ServerException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ServerException.php',
@@ -299,9 +300,9 @@ class ComposerStaticInit17617d2c67634767994bfaf95d242ff8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit17617d2c67634767994bfaf95d242ff8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit17617d2c67634767994bfaf95d242ff8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit17617d2c67634767994bfaf95d242ff8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1cbf2d3f95de901f2a1d5fce149681b2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1cbf2d3f95de901f2a1d5fce149681b2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1cbf2d3f95de901f2a1d5fce149681b2::$classMap;
 
         }, null, ClassLoader::class);
     }

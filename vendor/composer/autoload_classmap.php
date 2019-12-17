@@ -77,6 +77,7 @@ return array(
     'AcVendor\\GuzzleHttp\\Exception\\ClientException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ClientException.php',
     'AcVendor\\GuzzleHttp\\Exception\\ConnectException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ConnectException.php',
     'AcVendor\\GuzzleHttp\\Exception\\GuzzleException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/GuzzleException.php',
+    'AcVendor\\GuzzleHttp\\Exception\\InvalidArgumentException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/InvalidArgumentException.php',
     'AcVendor\\GuzzleHttp\\Exception\\RequestException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/RequestException.php',
     'AcVendor\\GuzzleHttp\\Exception\\SeekException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/SeekException.php',
     'AcVendor\\GuzzleHttp\\Exception\\ServerException' => $baseDir . '/ac_vendor/guzzlehttp/guzzle/src/Exception/ServerException.php',

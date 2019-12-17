@@ -25,6 +25,11 @@ if ( isset( $activecampaign_for_woocommerce_settings['api_key'] ) ) {
 	$activecampaign_for_woocommerce_api_key = $activecampaign_for_woocommerce_settings['api_key'];
 }
 
+$activecampaign_for_woocommerce_debug = '0';
+if ( isset( $activecampaign_for_woocommerce_settings['ac_debug'] ) ) {
+	$activecampaign_for_woocommerce_debug = $activecampaign_for_woocommerce_settings['ac_debug'];
+}
+
 $activecampaign_for_woocommerce_abcart_wait = '1';
 if ( isset( $activecampaign_for_woocommerce_settings['abcart_wait'] ) ) {
 	$activecampaign_for_woocommerce_abcart_wait = $activecampaign_for_woocommerce_settings['abcart_wait'];
@@ -43,10 +48,12 @@ if ( isset( $activecampaign_for_woocommerce_settings['checkbox_display_option'] 
 
 <div id="activecampaign-for-woocommerce-app" data='{
 	"abCartOptions": <?php echo esc_html( $this->get_ab_cart_wait_options() ); ?>,
+	"acDebugOptions": <?php echo esc_html( $this->get_ac_debug_options() ); ?>,
 	"checkboxDisplayOptions": <?php echo esc_html( $this->get_checkbox_display_options() ); ?>,
 	"notices": <?php echo esc_html( $this->get_admin_notices() ); ?>,
 	"api_url": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_api_url ) ); ?>",
 	"api_key": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_api_key ) ); ?>",
+	"ac_debug": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_debug ) ); ?>",
 	"abcart_wait": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_abcart_wait ) ); ?>",
 	"optin_checkbox_text": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_optin_checkbox_text ) ); ?>",
 	"checkbox_display_option": "<?php echo esc_html( sanitize_text_field( $activecampaign_for_woocommerce_optin_checkbox_display_option ) ); ?>",
@@ -128,6 +135,24 @@ if ( isset( $activecampaign_for_woocommerce_settings['checkbox_display_option'] 
 				<ac-radio v-for='(label, value) in checkboxDisplayOptions' :key='value' :label='label' :value='value' name='checkbox_display_option' :selected='checkbox_display_option'></ac-radio>
 
 			</b-tab-item>
+
+			<b-tab-item id="activecampaign_advanced" label="<?php esc_html_e( 'Advanced', ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOCALIZATION_DOMAIN ); ?>">
+
+				<h2>
+					<?php
+					esc_html_e( 'ActiveCampaign Debug Logging', ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOCALIZATION_DOMAIN );
+					?>
+				</h2>
+				<p>
+					<?php
+					esc_html_e( 'Select "On" to enable debug logging.', ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOCALIZATION_DOMAIN );
+					?>
+				</p>
+
+				<ac-radio v-for='(label, value) in acDebugOptions' :key='value' :label='label' :value='value' name='ac_debug' :selected='ac_debug'></ac-radio>
+
+			</b-tab-item>
+
 
 			<ac-button @click="ajaxUpdateSettings" :loading="loading">
 				<?php

@@ -1,8 +1,8 @@
 <?php
 namespace AcVendor\GuzzleHttp;
 
-use AcVendor\GuzzleHttp\Promise\PromiseInterface;
 use AcVendor\GuzzleHttp\Exception\GuzzleException;
+use AcVendor\GuzzleHttp\Promise\PromiseInterface;
 use AcVendor\Psr\Http\Message\RequestInterface;
 use AcVendor\Psr\Http\Message\ResponseInterface;
 use AcVendor\Psr\Http\Message\UriInterface;
@@ -12,7 +12,10 @@ use AcVendor\Psr\Http\Message\UriInterface;
  */
 interface ClientInterface
 {
-    const VERSION = '6.3.3';
+    /**
+     * @deprecated Will be removed in Guzzle 7.0.0
+     */
+    const VERSION = '6.5.0';
 
     /**
      * Send an HTTP request.

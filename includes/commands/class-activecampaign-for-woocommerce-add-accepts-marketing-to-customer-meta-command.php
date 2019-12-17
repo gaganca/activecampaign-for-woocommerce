@@ -73,13 +73,23 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 
 		$accepts_marketing = $this->extract_accepts_marketing_value();
 
+		$this->logger->debug( "Extracted accepts marketing value: $accepts_marketing" );
+
 		$id = $order->get_customer_id();
 
 		// If a customer is logged in, set the value of accepts marketing on the user meta-data.
 		// For guest checkouts set it on the order meta-data.
 		if ( ! $id ) {
+			$this->logger->debug( 'No ID for customer. Setting accepts marketing on the order.' );
+
 			$this->update_order_accepts_marketing( $order, $accepts_marketing );
+
+			$this->logger->debug(
+				'Updated order with accepts marketing meta data: '
+				. $order->get_meta( User_Meta_Service::ACTIVECAMPAIGN_ACCEPTS_MARKETING )
+			);
 		} else {
+			$this->logger->debug( "ID found for customer: $id. Setting accepts marketing on the customer record." );
 			$this->update_user_accepts_marketing( $id, $accepts_marketing );
 		}
 
@@ -92,10 +102,10 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 	 * @return bool
 	 */
 	private function nonce_is_valid() {
-		return (bool) wp_verify_nonce(
-			$_POST['woocommerce-process-checkout-nonce'],
-			'woocommerce-process_checkout'
-		);
+		// see: https://github.com/woocommerce/woocommerce/blob/master/includes/class-wc-checkout.php#L1076
+		$nonce_value = wc_get_var( $_REQUEST['woocommerce-process-checkout-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) );
+
+		return (bool) wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' );
 	}
 
 	/**

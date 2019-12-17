@@ -186,6 +186,19 @@ class Activecampaign_For_Woocommerce_Admin {
 	}
 
 	/**
+	 * Radio option for toggling debug logging.
+	 */
+	public function get_ac_debug_options() {
+		return wp_json_encode(
+			[
+				// value  // label
+				'1' => esc_html__( 'On', ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOCALIZATION_DOMAIN ),
+				'0' => esc_html__( 'Off', ACTIVECAMPAIGN_FOR_WOOCOMMERCE_LOCALIZATION_DOMAIN ),
+			]
+		);
+	}
+
+	/**
 	 * Radio options for "Checkbox display options"
 	 */
 	public function get_checkbox_display_options() {

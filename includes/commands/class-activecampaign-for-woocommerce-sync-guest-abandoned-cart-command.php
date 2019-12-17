@@ -15,9 +15,7 @@ use Activecampaign_For_Woocommerce_Ecom_Customer as Ecom_Customer;
 use Activecampaign_For_Woocommerce_Ecom_Customer_Repository as Ecom_Customer_Repository;
 use Activecampaign_For_Woocommerce_Ecom_Order_Factory as Ecom_Order_Factory;
 use Activecampaign_For_Woocommerce_Ecom_Order_Repository as Ecom_Order_Repository;
-use Activecampaign_For_Woocommerce_User_Meta_Service as User_Meta_Service;
 use Activecampaign_For_Woocommerce_Logger as Logger;
-use AcVendor\GuzzleHttp\Exception\GuzzleException;
 
 /**
  * Handles sending the guest customer and pending order to AC.
@@ -106,14 +104,14 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 * The native ecom order object used to
 	 * create or update an order in AC
 	 *
-	 * @var Ecom_Order
+	 * @var Activecampaign_For_Woocommerce_Ecom_Order
 	 */
 	private $ecom_order;
 
 	/**
 	 * The resulting existing or newly created AC ecom order
 	 *
-	 * @var Ecom_Model
+	 * @var Activecampaign_For_Woocommerce_Ecom_Model_Interface
 	 */
 	private $order_ac;
 
@@ -125,6 +123,18 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 * @var boolean
 	 */
 	private $order_ac_exists = false;
+	/**
+	 * The custom ActiveCampaign logger
+	 *
+	 * @var Activecampaign_For_Woocommerce_Logger
+	 */
+	private $logger;
+	/**
+	 * The WooCommerce session
+	 *
+	 * @var WC_Session|null
+	 */
+	private $wc_session;
 
 	/**
 	 * Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command constructor.
@@ -289,6 +299,11 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 
 			try {
 				// Try to create the new customer in AC
+				$this->logger->debug(
+					'Creating customer in ActiveCampaign: '
+					. \AcVendor\GuzzleHttp\json_encode( $new_customer->serialize_to_array() )
+				);
+
 				$this->customer_ac = $this->customer_repository->create( $new_customer );
 			} catch ( Exception $e ) {
 				$this->logger->debug(
@@ -365,6 +380,11 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 			// Order does not exist in AC yet
 			try {
 				// Try to create the new order in AC
+				$this->logger->debug(
+					'Creating order in ActiveCampaign: '
+					. \AcVendor\GuzzleHttp\json_encode( $this->ecom_order->serialize_to_array() )
+				);
+
 				$this->order_ac = $this->order_repository->create( $this->ecom_order );
 				return 2;
 			} catch ( Exception $e ) {
@@ -407,5 +427,23 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 		}
 
 		return true;
+	}
+
+	/**
+	 * Set the logger (for testing)
+	 *
+	 * @param Activecampaign_For_Woocommerce_Logger $logger The logger.
+	 */
+	public function setLogger( $logger ) {
+		$this->logger = $logger;
+	}
+
+	/**
+	 * Set the session (for testing)
+	 *
+	 * @param WC_Session|null $wc_session The session.
+	 */
+	public function setWcSession( $wc_session ) {
+		$this->wc_session = $wc_session;
 	}
 }

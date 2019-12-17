@@ -44,14 +44,23 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	private $path_to_log_directory;
 
 	/**
+	 * Whether or not to send debug statements over the INFO level
+	 *
+	 * @var bool
+	 */
+	private $ac_debug;
+
+	/**
 	 * Logger constructor.
 	 *
-	 * @param WC_Logger_Interface|null $logger optional logger parameter used for testing.
+	 * @param WC_Logger_Interface|null $logger      optional logger parameter used for testing.
 	 * @param string                   $plugin_name Stylized name of our plugin.
+	 * @param string|null              $ac_debug    Whether or not to enable debug logging via the INFO level.
 	 */
 	public function __construct(
 		WC_Logger_Interface $logger = null,
-		$plugin_name = ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PLUGIN_NAME_KEBAB
+		$plugin_name = ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PLUGIN_NAME_KEBAB,
+		$ac_debug = null
 	) {
 		$this->path_to_log_directory = wp_upload_dir()['basedir'] . '/wc-logs';
 		$this->context               = array( 'source' => $plugin_name );
@@ -59,6 +68,13 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 			$this->createLogDirectory();
 		}
 		$this->logger = null !== $logger ? $logger : wc_get_logger();
+
+		if ( is_string( $ac_debug ) ) {
+			$this->ac_debug = '1' === $ac_debug;
+		} else {
+			$settings       = get_option( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_OPTION_NAME );
+			$this->ac_debug = isset( $settings['ac_debug'] ) ? '1' === $settings['ac_debug'] : false;
+		}
 	}
 
 	// phpcs:disable
@@ -124,7 +140,14 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function debug( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
-		$this->logger->debug( $message, $context );
+
+		// If debug logging is turned on in the AC plugin settings, send all debug logs via the INFO level.
+		// That way, we can record debug logs regardless of the PHP error reporting level.
+		if ( $this->ac_debug ) {
+			$this->logger->info( "[ActiveCampaign Debug] $message", $context );
+		} else {
+			$this->logger->debug( $message, $context );
+		}
 	}
 
 	/**

@@ -59,6 +59,10 @@ class Activecampaign_For_Woocommerce_Activator {
 			$options_to_be_saved['checkbox_display_option'] = 'visible_checked_by_default';
 		}
 
+		if ( ! isset( $current_options['ac_debug'] ) ) {
+			$options_to_be_saved['ac_debug'] = '0';
+		}
+
 		$this->admin->update_storage( $options_to_be_saved );
 	}
 }
