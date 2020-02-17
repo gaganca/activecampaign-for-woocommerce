@@ -11,9 +11,11 @@
 (function( $ ) {
 	'use strict';
 
-	// Holds the modified email address value
+	// Holds the modified email address, first and last name values
 	var billing_email = '';
-
+	var billing_first_name = '';
+	var billing_last_name = '';
+	
 	// Holds the setTimeout executor
 	var sync_guest_abandoned_cart_wait = null;
 
@@ -60,7 +62,9 @@
 			url: public_vars.ajaxurl,
 			data: {
 				action: "activecampaign_for_woocommerce_cart_sync_guest",
-				email: billing_email
+				email: billing_email,
+				first_name: billing_first_name,
+				last_name: billing_last_name
 			},
 			success: function (response) {
 			}
@@ -69,23 +73,27 @@
 		// Release the wait so it can be set again.
 		sync_guest_abandoned_cart_wait = null;
 	}
+	
+	/**
+	*	Validate email, using the regex from ac_str_email_pattern
+	* ac_global/functions/str.php in Hosted
+	*/
+	function validate_email(input_email) {
+		var email_regex = /[\+_a-z0-9\u00a1-\uffff-'&=]+(?:\.[\+_a-z0-9\u00a1-\uffff-'&=]+)*\.{0,1}@[a-z0-9\u00a1-\uffff-]+(?:\.[a-z0-9\u00a1-\uffff-]+)*(?:\.[a-z]{2,})/; 
+		return email_regex.test(String(input_email).toLowerCase());
+	}
 
 	$( document ).ready(function() {
 		$( '.woocommerce-checkout #billing_email' ).keyup(function() {
+			var $checkout = $(this).closest('.woocommerce-checkout');
+			billing_first_name = $checkout.find("#billing_first_name").val();
+			billing_last_name = $checkout.find("#billing_last_name").val();
+
 			var billing_email_value = $( this ).val();
 
 			var billing_email_val_not_empty = billing_email_value !== '';
 			var billing_email_val_changed = billing_email_value !== billing_email;
-
-			var billing_email_val_valid_email = false;
-			var location_of_ampersand = billing_email_value.indexOf('@');
-			var ampersand_exists = location_of_ampersand !== -1;
-			var tld_dot_after_ampersand = billing_email_value.indexOf('.') > location_of_ampersand;
-			var tld_dot_not_last_char = billing_email_value.lastIndexOf('.') < billing_email_value.length - 1;
-
-			if ( ampersand_exists && tld_dot_after_ampersand && tld_dot_not_last_char ) {
-				billing_email_val_valid_email = true;
-			}
+			var billing_email_val_valid_email = validate_email(billing_email_value);
 
 			if (
 				billing_email_val_not_empty &&

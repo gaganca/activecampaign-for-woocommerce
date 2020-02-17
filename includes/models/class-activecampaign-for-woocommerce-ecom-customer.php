@@ -36,6 +36,8 @@ class Activecampaign_For_Woocommerce_Ecom_Customer implements Ecom_Model, Has_Id
 		'externalid'   => 'externalid',
 		'email'        => 'email',
 		'id'           => 'id',
+		'first_name'   => 'first_name',
+		'last_name'    => 'last_name',
 	];
 
 	/**
@@ -65,6 +67,20 @@ class Activecampaign_For_Woocommerce_Ecom_Customer implements Ecom_Model, Has_Id
 	 * @var string
 	 */
 	private $id;
+
+	/**
+	 * The customer's first name.
+	 *
+	 * @var string
+	 */
+	private $first_name;
+
+	/**
+	 * The customer's last name.
+	 *
+	 * @var string
+	 */
+	private $last_name;
 
 	/**
 	 * Returns a connection id.
@@ -136,5 +152,41 @@ class Activecampaign_For_Woocommerce_Ecom_Customer implements Ecom_Model, Has_Id
 	 */
 	public function set_id( $id ) {
 		$this->id = $id;
+	}
+
+	/**
+	 * Returns the first_name.
+	 *
+	 * @return string
+	 */
+	public function get_first_name() {
+		return $this->first_name;
+	}
+
+	/**
+	 * Sets the first_name.
+	 *
+	 * @param string $first_name The first_name.
+	 */
+	public function set_first_name( $first_name ) {
+		$this->first_name = $first_name;
+	}
+
+	/**
+	 * Returns the last_name.
+	 *
+	 * @return string
+	 */
+	public function get_last_name() {
+		return $this->last_name;
+	}
+
+	/**
+	 * Sets the last_name.
+	 *
+	 * @param string $last_name The last_name.
+	 */
+	public function set_last_name( $last_name ) {
+		$this->last_name = $last_name;
 	}
 }

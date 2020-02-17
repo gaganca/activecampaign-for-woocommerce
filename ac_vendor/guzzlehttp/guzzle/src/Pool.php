@@ -2,6 +2,7 @@
 namespace AcVendor\GuzzleHttp;
 
 use AcVendor\GuzzleHttp\Promise\EachPromise;
+use AcVendor\GuzzleHttp\Promise\PromiseInterface;
 use AcVendor\GuzzleHttp\Promise\PromisorInterface;
 use AcVendor\Psr\Http\Message\RequestInterface;
 
@@ -71,7 +72,8 @@ class Pool implements PromisorInterface
 
     /**
      * Get promise
-     * @return GuzzleHttp\Promise\Promise
+     *
+     * @return PromiseInterface
      */
     public function promise()
     {

@@ -79,6 +79,20 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	private $customer_email;
 
 	/**
+	 * The guest customer first name
+	 *
+	 * @var string
+	 */
+	private $customer_first_name;
+
+	/**
+	 * The guest customer last name
+	 *
+	 * @var string
+	 */
+	private $customer_last_name;
+
+	/**
 	 * The WooCommerce customer object
 	 *
 	 * @var WC_Customer
@@ -255,6 +269,18 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 			return false;
 		}
 
+		if ( isset( $_REQUEST['first_name'] ) ) {
+			$this->customer_first_name = $_REQUEST['first_name'];
+		} else {
+			$this->customer_first_name = '';
+		}
+
+		if ( isset( $_REQUEST['last_name'] ) ) {
+			$this->customer_last_name = $_REQUEST['last_name'];
+		} else {
+			$this->customer_last_name = '';
+		}
+
 		return true;
 	}
 
@@ -296,6 +322,8 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 			$new_customer = new Ecom_Customer();
 			$new_customer->set_email( $this->customer_email );
 			$new_customer->set_connectionid( $connection_id );
+			$new_customer->set_first_name( $this->customer_first_name );
+			$new_customer->set_last_name( $this->customer_last_name );
 
 			try {
 				// Try to create the new customer in AC
