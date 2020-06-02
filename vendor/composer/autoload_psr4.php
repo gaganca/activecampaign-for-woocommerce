@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AcVendor\\Symfony\\Polyfill\\Php72\\' => array($baseDir . '/ac_vendor/symfony/polyfill-php72'),
+    'AcVendor\\Symfony\\Polyfill\\Mbstring\\' => array($baseDir . '/ac_vendor/symfony/polyfill-mbstring'),
+    'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => array($baseDir . '/ac_vendor/symfony/polyfill-intl-idn'),
     'AcVendor\\Psr\\Log\\' => array($baseDir . '/ac_vendor/psr/log/Psr/Log'),
     'AcVendor\\Psr\\Http\\Message\\' => array($baseDir . '/ac_vendor/psr/http-message/src'),
     'AcVendor\\Psr\\Container\\' => array($baseDir . '/ac_vendor/psr/container/src'),

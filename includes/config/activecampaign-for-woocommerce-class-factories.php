@@ -106,13 +106,13 @@ return array(
 		return new Admin( $plugin_name, $version, $validator, $event );
 	},
 
-	Api_Client::class                                 => function () {
+	Api_Client::class                                 => function ( LoggerInterface $logger ) {
 		$settings = get_option( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_OPTION_NAME );
 
 		$api_uri = isset( $settings['api_url'] ) ? $settings['api_url'] : null;
 		$api_key = isset( $settings['api_key'] ) ? $settings['api_key'] : null;
 
-		return new Api_Client( $api_uri, $api_key );
+		return new Api_Client( $api_uri, $api_key, $logger );
 	},
 
 	AC_Public::class                                  => function ( Admin $admin ) {

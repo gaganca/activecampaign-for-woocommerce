@@ -56,7 +56,7 @@ class Activecampaign_For_Woocommerce_Create_And_Save_Cart_Id_Command implements 
 		$user_id = get_current_user_id();
 
 		if ( ! $user_id ) {
-			$this->logger->info( 'Create and save cart id: missing user id' );
+			$this->logger->debug( 'Create and save cart id: missing user id' );
 
 			return;
 		}

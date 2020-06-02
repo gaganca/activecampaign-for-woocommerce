@@ -1,9 +1,9 @@
 <?php
 namespace AcVendor\GuzzleHttp\Handler;
 
-use AcVendor\GuzzleHttp\Exception\InvalidArgumentException;
 use AcVendor\GuzzleHttp\Promise as P;
 use AcVendor\GuzzleHttp\Promise\Promise;
+use AcVendor\GuzzleHttp\Utils;
 use AcVendor\Psr\Http\Message\RequestInterface;
 
 /**
@@ -102,7 +102,7 @@ class CurlMultiHandler
     {
         // Add any delayed handles if needed.
         if ($this->delays) {
-            $currentTime = \AcVendor\GuzzleHttp\_current_time();
+            $currentTime = Utils::currentTime();
             foreach ($this->delays as $id => $delay) {
                 if ($currentTime >= $delay) {
                     unset($this->delays[$id]);
@@ -154,7 +154,7 @@ class CurlMultiHandler
         if (empty($easy->options['delay'])) {
             curl_multi_add_handle($this->_mh, $easy->handle);
         } else {
-            $this->delays[$id] = \AcVendor\GuzzleHttp\_current_time() + ($easy->options['delay'] / 1000);
+            $this->delays[$id] = Utils::currentTime() + ($easy->options['delay'] / 1000);
         }
     }
 
@@ -206,7 +206,7 @@ class CurlMultiHandler
 
     private function timeToNext()
     {
-        $currentTime = \AcVendor\GuzzleHttp\_current_time();
+        $currentTime = Utils::currentTime();
         $nextTime = PHP_INT_MAX;
         foreach ($this->delays as $time) {
             if ($time < $nextTime) {

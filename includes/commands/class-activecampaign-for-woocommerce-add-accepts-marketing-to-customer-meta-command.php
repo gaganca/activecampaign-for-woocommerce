@@ -66,7 +66,7 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 		$order = $args[0];
 
 		if ( ! $this->nonce_is_valid() ) {
-			$this->logger->debug( 'Invalid checkout nonce' );
+			$this->logger->error( 'Invalid checkout nonce' );
 
 			return $order;
 		}
@@ -105,7 +105,13 @@ class Activecampaign_For_Woocommerce_Add_Accepts_Marketing_To_Customer_Meta_Comm
 		// see: https://github.com/woocommerce/woocommerce/blob/master/includes/class-wc-checkout.php#L1076
 		$nonce_value = wc_get_var( $_REQUEST['woocommerce-process-checkout-nonce'], wc_get_var( $_REQUEST['_wpnonce'], '' ) );
 
-		return (bool) wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' );
+		$valid = (bool) wp_verify_nonce( $nonce_value, 'woocommerce-process_checkout' );
+
+		if ( ! $valid ) {
+			$this->logger->debug( 'Invalid nonce', [ 'nonce_value' => $nonce_value ] );
+		}
+
+		return $valid;
 	}
 
 	/**

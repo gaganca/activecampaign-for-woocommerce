@@ -7,6 +7,7 @@ use AcVendor\GuzzleHttp\Promise\FulfilledPromise;
 use AcVendor\GuzzleHttp\Promise\PromiseInterface;
 use AcVendor\GuzzleHttp\Psr7;
 use AcVendor\GuzzleHttp\TransferStats;
+use AcVendor\GuzzleHttp\Utils;
 use AcVendor\Psr\Http\Message\RequestInterface;
 use AcVendor\Psr\Http\Message\ResponseInterface;
 use AcVendor\Psr\Http\Message\StreamInterface;
@@ -33,7 +34,7 @@ class StreamHandler
             usleep($options['delay'] * 1000);
         }
 
-        $startTime = isset($options['on_stats']) ? \AcVendor\GuzzleHttp\_current_time() : null;
+        $startTime = isset($options['on_stats']) ? Utils::currentTime() : null;
 
         try {
             // Does not support the expect header.
@@ -82,7 +83,7 @@ class StreamHandler
             $stats = new TransferStats(
                 $request,
                 $response,
-                \AcVendor\GuzzleHttp\_current_time() - $startTime,
+                Utils::currentTime() - $startTime,
                 $error,
                 []
             );

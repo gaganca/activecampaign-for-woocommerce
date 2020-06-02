@@ -11,7 +11,7 @@
  */
 
 use AcVendor\Psr\Log\LoggerInterface;
-use ActiveCampaign_For_WooCommerce_Runtime_Exception as Runtime_Exception;
+use Activecampaign_For_Woocommerce_Request_Id_Service as RequestIdService;
 
 /**
  * Logger object
@@ -84,6 +84,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function emergency( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->emergency( $message, $context );
 	}
 
@@ -92,6 +93,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function alert( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->alert( $message, $context );
 	}
 
@@ -100,6 +102,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function critical( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->critical( $message, $context );
 	}
 
@@ -108,6 +111,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function error( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->error( $message, $context );
 	}
 
@@ -116,6 +120,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function warning( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->warning( $message, $context );
 	}
 
@@ -124,6 +129,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function notice( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->notice( $message, $context );
 	}
 
@@ -132,6 +138,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function info( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->info( $message, $context );
 	}
 
@@ -140,6 +147,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function debug( $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 
 		// If debug logging is turned on in the AC plugin settings, send all debug logs via the INFO level.
 		// That way, we can record debug logs regardless of the PHP error reporting level.
@@ -155,6 +163,7 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	public function log( $level, $message, array $context = array() ) {
 		$context = $this->resolveContext( $context );
+		$message = $this->formatMessageWithContext( $message, $context );
 		$this->logger->log( $level, $message, $context );
 	}
 
@@ -211,5 +220,21 @@ class Activecampaign_For_Woocommerce_Logger implements LoggerInterface {
 	 */
 	private function createLogDirectory() {
 		return mkdir( $this->path_to_log_directory );
+	}
+
+	/**
+	 * Format the message with the given context array.
+	 *
+	 * @param string $message The log message.
+	 * @param array  $context The log context.
+	 *
+	 * @return string
+	 */
+	private function formatMessageWithContext( $message, array &$context ) {
+		// Add the request ID to the log entry
+		$context['request_id'] = RequestIdService::get_request_id();
+
+		// The logger doesn't seem to actually use the context array, so we'll merge it in with the message
+		return $message . "\nContext: " . wp_json_encode( $context, JSON_PRETTY_PRINT );
 	}
 }

@@ -18,6 +18,11 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 /**
+ * Polyfill for intl functions
+ */
+require_once __DIR__ . '/../../ac_vendor/symfony/polyfill-intl-idn/bootstrap.php';
+
+/**
  * Define all our constants.
  */
 require_once __DIR__ . '/activecampaign-for-woocommerce-global-constants.php';

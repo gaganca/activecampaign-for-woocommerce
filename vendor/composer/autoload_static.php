@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf435892af23851210d068415e745275c
+class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
 {
     public static $files = array (
         '3235689ae520774249788ae5d5475c84' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/functions_include.php',
@@ -14,11 +14,20 @@ class ComposerStaticInitf435892af23851210d068415e745275c
         '275cdeae0a0b233cf2f6c151b81d41c7' => __DIR__ . '/../..' . '/ac_vendor/php-di/php-di/src/DI/ContainerBuilder.php',
         '03744023bb0c65527553d487b84e3d27' => __DIR__ . '/../..' . '/ac_vendor/php-di/php-di/src/DI/functions.php',
         '164b067373632bcad8fd2c4a76f967ae' => __DIR__ . '/../..' . '/ac_vendor/ralouphie/getallheaders/src/getallheaders.php',
+        '20ddbdbd63dafc3c360138290a64edba' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/bootstrap.php',
+        'b3e3ec5cecb503ce8236c1665d12803d' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/bootstrap.php',
+        '082634b318ba8c63bc411650269433fe' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/lowerCase.php',
+        '72a244b0aa133ff277a4c8c02d01abe8' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/titleCaseRegexp.php',
+        '32bade57026a8eefd1c205a608ab9d62' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/upperCase.php',
+        '4307e8dc0ef699f143325f0c0348cea1' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
+            'AcVendor\\Symfony\\Polyfill\\Php72\\' => 32,
+            'AcVendor\\Symfony\\Polyfill\\Mbstring\\' => 35,
+            'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 35,
             'AcVendor\\Psr\\Log\\' => 17,
             'AcVendor\\Psr\\Http\\Message\\' => 26,
             'AcVendor\\Psr\\Container\\' => 23,
@@ -33,6 +42,18 @@ class ComposerStaticInitf435892af23851210d068415e745275c
     );
 
     public static $prefixDirsPsr4 = array (
+        'AcVendor\\Symfony\\Polyfill\\Php72\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72',
+        ),
+        'AcVendor\\Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring',
+        ),
+        'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn',
+        ),
         'AcVendor\\Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log',
@@ -206,6 +227,7 @@ class ComposerStaticInitf435892af23851210d068415e745275c
         'AcVendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/RetryMiddleware.php',
         'AcVendor\\GuzzleHttp\\TransferStats' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/TransferStats.php',
         'AcVendor\\GuzzleHttp\\UriTemplate' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/UriTemplate.php',
+        'AcVendor\\GuzzleHttp\\Utils' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/Utils.php',
         'AcVendor\\Interop\\Container\\ContainerInterface' => __DIR__ . '/../..' . '/ac_vendor/container-interop/container-interop/src/Interop/Container/ContainerInterface.php',
         'AcVendor\\Interop\\Container\\Exception\\ContainerException' => __DIR__ . '/../..' . '/ac_vendor/container-interop/container-interop/src/Interop/Container/Exception/ContainerException.php',
         'AcVendor\\Interop\\Container\\Exception\\NotFoundException' => __DIR__ . '/../..' . '/ac_vendor/container-interop/container-interop/src/Interop/Container/Exception/NotFoundException.php',
@@ -246,9 +268,12 @@ class ComposerStaticInitf435892af23851210d068415e745275c
         'AcVendor\\Psr\\Log\\LoggerInterface' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/LoggerInterface.php',
         'AcVendor\\Psr\\Log\\LoggerTrait' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/LoggerTrait.php',
         'AcVendor\\Psr\\Log\\NullLogger' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/NullLogger.php',
-        'AcVendor\\Psr\\Log\\Test\\DummyTest' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
+        'AcVendor\\Psr\\Log\\Test\\DummyTest' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/DummyTest.php',
         'AcVendor\\Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'AcVendor\\Psr\\Log\\Test\\TestLogger' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/TestLogger.php',
+        'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\Idn' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/Idn.php',
+        'AcVendor\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Mbstring.php',
+        'AcVendor\\Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72/Php72.php',
         'ActiveCampaign_For_WooCommerce_Runtime_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-runtime-exception.php',
         'Activecampaign_For_Woocommerce' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce.php',
         'Activecampaign_For_Woocommerce_Activator' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce-activator.php',
@@ -287,6 +312,7 @@ class ComposerStaticInitf435892af23851210d068415e745275c
         'Activecampaign_For_Woocommerce_Logger' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce-logger.php',
         'Activecampaign_For_Woocommerce_Public' => __DIR__ . '/../..' . '/public/class-activecampaign-for-woocommerce-public.php',
         'Activecampaign_For_Woocommerce_Repository_Interface' => __DIR__ . '/../..' . '/includes/repositories/interfaces/class-activecampaign-for-woocommerce-repository-interface.php',
+        'Activecampaign_For_Woocommerce_Request_Id_Service' => __DIR__ . '/../..' . '/includes/services/class-activecampaign-for-woocommerce-request-id-service.php',
         'Activecampaign_For_Woocommerce_Resource_Not_Found_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-resource-not-found-exception.php',
         'Activecampaign_For_Woocommerce_Resource_Unprocessable_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-resource-unprocessable-exception.php',
         'Activecampaign_For_Woocommerce_Set_Connection_Id_Cache_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-set-connection-id-cache-command.php',
@@ -300,9 +326,9 @@ class ComposerStaticInitf435892af23851210d068415e745275c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf435892af23851210d068415e745275c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf435892af23851210d068415e745275c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf435892af23851210d068415e745275c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$classMap;
 
         }, null, ClassLoader::class);
     }

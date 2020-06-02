@@ -16,6 +16,8 @@
 use AcVendor\GuzzleHttp\Client;
 use AcVendor\GuzzleHttp\Exception\GuzzleException;
 use AcVendor\Psr\Http\Message\ResponseInterface;
+use AcVendor\Psr\Log\LoggerInterface;
+use Activecampaign_For_Woocommerce_Request_Id_Service as RequestIdService;
 
 /**
  * The main API Client class.
@@ -106,18 +108,43 @@ class Activecampaign_For_Woocommerce_Api_Client {
 		'put',
 		'post',
 	];
+	/**
+	 * Whether or not to log the response.
+	 *
+	 * @since 1.2.11
+	 * @var   bool
+	 */
+	private $ac_debug;
+	/**
+	 * The WC Logger
+	 *
+	 * @since 1.2.11
+	 * @var   LoggerInterface|null
+	 */
+	private $logger;
 
 	/**
 	 * Activecampaign_For_Woocommerce_Api_Client constructor.
 	 *
-	 * @param string|null $api_uri The API Uri for the client to use.
-	 * @param string|null $api_key The API Key for the client to use.
+	 * @param string|null          $api_uri The API Uri for the client to use.
+	 * @param string|null          $api_key The API Key for the client to use.
+	 * @param LoggerInterface|null $logger  The logger.
+	 * @param null                 $debug   Whether debugging is turned on.
 	 *
 	 * @since      1.0.0
 	 */
-	public function __construct( $api_uri = null, $api_key = null ) {
+	public function __construct( $api_uri = null, $api_key = null, LoggerInterface $logger = null, $debug = null ) {
 		$this->api_uri = $api_uri;
 		$this->api_key = $api_key;
+
+		$this->logger = $logger;
+
+		if ( null === $debug ) {
+			$settings       = get_option( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_DB_OPTION_NAME );
+			$this->ac_debug = isset( $settings['ac_debug'] ) ? '1' === $settings['ac_debug'] : false;
+		} else {
+			$this->ac_debug = $debug;
+		}
 	}
 
 	/**
@@ -154,7 +181,8 @@ class Activecampaign_For_Woocommerce_Api_Client {
 			[
 				'base_uri' => $this->get_api_uri_with_v3_path(),
 				'headers'  => [
-					'Api-Token' => $this->get_api_key(),
+					'Api-Token'    => $this->get_api_key(),
+					'X-Request-Id' => RequestIdService::get_request_id(),
 				],
 			]
 		);
@@ -362,14 +390,26 @@ class Activecampaign_For_Woocommerce_Api_Client {
 		$endpoint = $this->construct_endpoint_with_filters();
 
 		if ( $this->body ) {
-			return $this->client->request(
+			$response = $this->client->request(
 				$this->method, $endpoint, [
 					'body' => $this->body,
 				]
 			);
+		} else {
+			$response = $this->client->request( $this->method, $endpoint );
 		}
 
-		return $this->client->request( $this->method, $endpoint );
+		if ( $response instanceof ResponseInterface && $this->ac_debug && $this->logger ) {
+			$this->logger->debug(
+				'Received response', [
+					'response_status_code' => $response->getStatusCode(),
+					'response_headers'     => $response->getHeaders(),
+					'response_body'        => $response->getBody()->getContents(),
+				]
+			);
+		}
+
+		return $response;
 	}
 
 	/**

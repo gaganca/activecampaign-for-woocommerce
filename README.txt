@@ -3,7 +3,7 @@ Contributors: acteamintegrations, bartboy011
 Tags: marketing, ecommerce, woocommerce, email, activecampaign, abandoned cart
 Requires at least: 4.7
 Tested up to: 5.2.1
-Stable tag: 1.2.10
+Stable tag: 1.2.11
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,11 +41,14 @@ Installation
 
 == Changelog ==
 
+= 1.2.11 =
+* Fix bug with abandoned cart when there is no logged in customer
+* Improve logging
+
 = 1.2.10 =
 * Upgrade Guzzle for bug fixes
 * Fix email validation
 * Send first and last name to guest abandoned carts
-* Add option to turn on debug logging
 
 = 1.2.9 =
 * Improve nonce validation

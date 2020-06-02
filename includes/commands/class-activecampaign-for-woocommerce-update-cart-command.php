@@ -11,6 +11,7 @@
  */
 
 use Activecampaign_For_Woocommerce_Admin as Admin;
+use Activecampaign_For_Woocommerce_Ecom_Customer as Ecom_Customer;
 use Activecampaign_For_Woocommerce_Ecom_Customer_Repository as Ecom_Customer_Repository;
 use Activecampaign_For_Woocommerce_Ecom_Order_Factory as Ecom_Order_Factory;
 use Activecampaign_For_Woocommerce_Ecom_Order_Repository as Ecom_Order_Repository;
@@ -75,6 +76,13 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 	private $logger;
 
 	/**
+	 * The resulting existing or newly created AC ecom customer
+	 *
+	 * @var Ecom_Model
+	 */
+	private $customer_ac;
+
+	/**
 	 * Activecampaign_For_Woocommerce_Update_Cart_Command constructor.
 	 *
 	 * @param WC_Cart|null                              $cart The WC Cart.
@@ -118,18 +126,19 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 	 * {@inheritDoc}
 	 *
 	 * @param mixed ...$args The array of parameters passed.
+	 * @return bool
 	 */
 	public function execute( ...$args ) {
 		$this->init();
 
 		// If the customer is not logged in, there is nothing to do
 		if ( ! ( $this->customer instanceof WC_Customer ) || $this->customer->get_email() === null ) {
-			return;
+			return false;
 		}
 
 		// First, make sure we have the ID for the ActiveCampaign customer record
 		if ( ! $this->verify_ac_customer_id( $this->customer->get_id() ) ) {
-			$this->logger->info(
+			$this->logger->debug(
 				'Create and save cart id: Missing id for ActiveCampaign customer record.',
 				[
 					'customer_email' => $this->customer->get_email(),
@@ -137,11 +146,12 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 				]
 			);
 
-			return;
+			$this->create_customer();
 		}
 
 		// Create the order object
-		$order = $this->factory->from_woocommerce( $this->cart, $this->customer );
+		$order = $this->get_order_factory()
+			->from_woocommerce( $this->cart, $this->customer );
 
 		// If we already have an AC ID, then this is an update. Otherwise, it's a create.
 		try {
@@ -153,7 +163,7 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 				 *
 				 * @var Activecampaign_For_Woocommerce_Ecom_Order $new_order
 				 */
-				$new_order = $this->order_repository->create( $order );
+				$new_order = $this->get_order_repository()->create( $order );
 				User_Meta_Service::set_current_cart_ac_id( $this->customer->get_id(), $new_order->get_id() );
 			}
 		} catch ( \Exception $e ) {
@@ -165,7 +175,9 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 			$message     = $e->getMessage();
 			$stack_trace = $e->getTrace();
 			$this->logger->error( $message, [ 'stack trace' => $stack_trace ] );
+			return false;
 		}
+		return true;
 	}
 	// phpcs:enable
 
@@ -207,8 +219,145 @@ class Activecampaign_For_Woocommerce_Update_Cart_Command implements Activecampai
 			return false;
 		}
 
-		User_Meta_Service::set_current_user_ac_customer_id( $user_id, $ecom_customer->get_id() );
+		if ( $ecom_customer ) {
+			User_Meta_Service::set_current_user_ac_customer_id( $user_id, $ecom_customer->get_id() );
+			return true;
+		}
 
+		return false;
+	}
+
+	/**
+	 * Creates a new ecomCustomer in Hosted
+	 *
+	 * @return bool whether or not a customer was created
+	 */
+	private function create_customer() {
+		$new_customer = new Ecom_Customer();
+		$new_customer->set_email( $this->customer->get_email() );
+		$new_customer->set_externalid( $this->customer->get_id() );
+		$new_customer->set_connectionid( $this->admin->get_storage()['connection_id'] );
+		$new_customer->set_first_name( $this->customer->get_first_name() );
+		$new_customer->set_last_name( $this->customer->get_last_name() );
+
+		try {
+			$this->set_customer_ac( $this->customer_repository->create( $new_customer ) );
+		} catch ( Exception $e ) {
+			$this->logger->debug(
+				'Customer creation exception: ' . $e->getMessage()
+			);
+			return false;
+		}
+
+		User_Meta_Service::set_current_user_ac_customer_id( $this->customer->get_id(), $this->customer_ac->get_id() );
 		return true;
+	}
+
+	/**
+	 * Returns the WC customer
+	 *
+	 * @return WC_Customer
+	 */
+	public function get_customer() {
+		return $this->customer;
+	}
+
+	/**
+	 * Sets the WC customer
+	 *
+	 * @param WC_Customer $wc_customer the WooCommerce customer.
+	 */
+	public function set_customer( $wc_customer ) {
+		$this->customer = $wc_customer;
+	}
+
+	/**
+	 * Returns the customer repository
+	 *
+	 * @return Activecampaign_For_Woocommerce_Ecom_Customer_Repository
+	 */
+	public function get_customer_repository() {
+		return $this->customer_repository;
+	}
+
+	/**
+	 * Sets the customer repository
+	 *
+	 * @param Activecampaign_For_Woocommerce_Ecom_Customer_Repository $repository the Ecom_Customer_Repository.
+	 */
+	public function set_customer_repository( $repository ) {
+		$this->customer_repository = $repository;
+	}
+
+	/**
+	 * Returns the order repository
+	 *
+	 * @return Activecampaign_For_Woocommerce_Ecom_Order_Repository
+	 */
+	public function get_order_repository() {
+		return $this->order_repository;
+	}
+
+	/**
+	 * Sets the order repository
+	 *
+	 * @param Activecampaign_For_Woocommerce_Ecom_Order_Repository $repository the Ecom_Order_Repository.
+	 */
+	public function set_order_repository( $repository ) {
+		$this->order_repository = $repository;
+	}
+
+	/**
+	 * Returns the Ecom_Customer
+	 *
+	 * @return Activecampaign_For_Woocommerce_Ecom_Customer
+	 */
+	public function get_customer_ac() {
+		return $this->customer_ac;
+	}
+
+	/**
+	 * Sets the Ecom_Customer
+	 *
+	 * @param Activecampaign_For_Woocommerce_Ecom_Customer $customer_ac the Ecom_Customer.
+	 */
+	public function set_customer_ac( $customer_ac ) {
+		$this->customer_ac = $customer_ac;
+	}
+
+	/**
+	 * Returns the Ecom_Order_Factory
+	 *
+	 * @return Activecampaign_For_Woocommerce_Ecom_Order_Factory
+	 */
+	public function get_order_factory() {
+		return $this->factory;
+	}
+
+	/**
+	 * Sets the Ecom_Order_Factory
+	 *
+	 * @param Activecampaign_For_Woocommerce_Ecom_Order_Factory $factory the Ecom_Order_Factory.
+	 */
+	public function set_order_factory( $factory ) {
+		$this->factory = $factory;
+	}
+
+	/**
+	 * Returns the WC_Cart
+	 *
+	 * @return WC_Cart
+	 */
+	public function get_cart() {
+		return $this->cart;
+	}
+
+	/**
+	 * Sets the WC_Cart
+	 *
+	 * @param WC_Cart $cart the WooCommerce Cart.
+	 */
+	public function set_cart( $cart ) {
+		$this->cart = $cart;
 	}
 }

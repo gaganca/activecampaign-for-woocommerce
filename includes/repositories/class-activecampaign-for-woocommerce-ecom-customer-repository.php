@@ -118,10 +118,14 @@ class Activecampaign_For_Woocommerce_Ecom_Customer_Repository implements Reposit
 	 * @param string $email The email to find the resource by.
 	 * @param string $connection_id The connection ID for the woocommerce integration.
 	 *
-	 * @return Ecom_Model
+	 * @return Ecom_Model|null
 	 * @throws Activecampaign_For_Woocommerce_Resource_Not_Found_Exception A 404 response.
 	 */
 	public function find_by_email_and_connection_id( $email, $connection_id ) {
+		if ( ! $email ) {
+			return null;
+		}
+
 		$ecom_order_model = new Ecom_Customer();
 
 		$result_array = $this->get_result_set_from_api_by_filter(
