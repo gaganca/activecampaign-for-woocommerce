@@ -1,4 +1,5 @@
 <?php
+
 namespace AcVendor\GuzzleHttp\Psr7;
 
 use AcVendor\Psr\Http\Message\UriInterface;

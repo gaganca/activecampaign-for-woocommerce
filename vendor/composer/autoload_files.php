@@ -14,9 +14,5 @@ return array(
     '03744023bb0c65527553d487b84e3d27' => $baseDir . '/ac_vendor/php-di/php-di/src/DI/functions.php',
     '164b067373632bcad8fd2c4a76f967ae' => $baseDir . '/ac_vendor/ralouphie/getallheaders/src/getallheaders.php',
     '20ddbdbd63dafc3c360138290a64edba' => $baseDir . '/ac_vendor/symfony/polyfill-intl-idn/bootstrap.php',
-    'b3e3ec5cecb503ce8236c1665d12803d' => $baseDir . '/ac_vendor/symfony/polyfill-mbstring/bootstrap.php',
-    '082634b318ba8c63bc411650269433fe' => $baseDir . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/lowerCase.php',
-    '72a244b0aa133ff277a4c8c02d01abe8' => $baseDir . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/titleCaseRegexp.php',
-    '32bade57026a8eefd1c205a608ab9d62' => $baseDir . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/upperCase.php',
     '4307e8dc0ef699f143325f0c0348cea1' => $baseDir . '/ac_vendor/symfony/polyfill-php72/bootstrap.php',
 );

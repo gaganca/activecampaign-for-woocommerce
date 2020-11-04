@@ -1,4 +1,5 @@
 <?php
+
 namespace AcVendor\GuzzleHttp\Promise;
 
 /**

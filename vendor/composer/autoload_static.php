@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
+class ComposerStaticInit6d0c34679e12b89c797440098c88ff50
 {
     public static $files = array (
         '3235689ae520774249788ae5d5475c84' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/functions_include.php',
@@ -15,10 +15,6 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         '03744023bb0c65527553d487b84e3d27' => __DIR__ . '/../..' . '/ac_vendor/php-di/php-di/src/DI/functions.php',
         '164b067373632bcad8fd2c4a76f967ae' => __DIR__ . '/../..' . '/ac_vendor/ralouphie/getallheaders/src/getallheaders.php',
         '20ddbdbd63dafc3c360138290a64edba' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/bootstrap.php',
-        'b3e3ec5cecb503ce8236c1665d12803d' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/bootstrap.php',
-        '082634b318ba8c63bc411650269433fe' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/lowerCase.php',
-        '72a244b0aa133ff277a4c8c02d01abe8' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/titleCaseRegexp.php',
-        '32bade57026a8eefd1c205a608ab9d62' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Resources/unidata/upperCase.php',
         '4307e8dc0ef699f143325f0c0348cea1' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72/bootstrap.php',
     );
 
@@ -26,7 +22,6 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'A' => 
         array (
             'AcVendor\\Symfony\\Polyfill\\Php72\\' => 32,
-            'AcVendor\\Symfony\\Polyfill\\Mbstring\\' => 35,
             'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 35,
             'AcVendor\\Psr\\Log\\' => 17,
             'AcVendor\\Psr\\Http\\Message\\' => 26,
@@ -45,10 +40,6 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\Symfony\\Polyfill\\Php72\\' => 
         array (
             0 => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72',
-        ),
-        'AcVendor\\Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring',
         ),
         'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\' => 
         array (
@@ -190,8 +181,11 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\GuzzleHttp\\Promise\\AggregateException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/AggregateException.php',
         'AcVendor\\GuzzleHttp\\Promise\\CancellationException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/CancellationException.php',
         'AcVendor\\GuzzleHttp\\Promise\\Coroutine' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Coroutine.php',
+        'AcVendor\\GuzzleHttp\\Promise\\Create' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Create.php',
+        'AcVendor\\GuzzleHttp\\Promise\\Each' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Each.php',
         'AcVendor\\GuzzleHttp\\Promise\\EachPromise' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/EachPromise.php',
         'AcVendor\\GuzzleHttp\\Promise\\FulfilledPromise' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/FulfilledPromise.php',
+        'AcVendor\\GuzzleHttp\\Promise\\Is' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Is.php',
         'AcVendor\\GuzzleHttp\\Promise\\Promise' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Promise.php',
         'AcVendor\\GuzzleHttp\\Promise\\PromiseInterface' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/PromiseInterface.php',
         'AcVendor\\GuzzleHttp\\Promise\\PromisorInterface' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/PromisorInterface.php',
@@ -199,18 +193,23 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\GuzzleHttp\\Promise\\RejectionException' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/RejectionException.php',
         'AcVendor\\GuzzleHttp\\Promise\\TaskQueue' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/TaskQueue.php',
         'AcVendor\\GuzzleHttp\\Promise\\TaskQueueInterface' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/TaskQueueInterface.php',
+        'AcVendor\\GuzzleHttp\\Promise\\Utils' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/promises/src/Utils.php',
         'AcVendor\\GuzzleHttp\\Psr7\\AppendStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/AppendStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\BufferStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/BufferStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\CachingStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/CachingStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\DroppingStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/DroppingStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\FnStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/FnStream.php',
+        'AcVendor\\GuzzleHttp\\Psr7\\Header' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Header.php',
         'AcVendor\\GuzzleHttp\\Psr7\\InflateStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/InflateStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\LazyOpenStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/LazyOpenStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\LimitStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/LimitStream.php',
+        'AcVendor\\GuzzleHttp\\Psr7\\Message' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Message.php',
         'AcVendor\\GuzzleHttp\\Psr7\\MessageTrait' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/MessageTrait.php',
+        'AcVendor\\GuzzleHttp\\Psr7\\MimeType' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/MimeType.php',
         'AcVendor\\GuzzleHttp\\Psr7\\MultipartStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/MultipartStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\NoSeekStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/NoSeekStream.php',
         'AcVendor\\GuzzleHttp\\Psr7\\PumpStream' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/PumpStream.php',
+        'AcVendor\\GuzzleHttp\\Psr7\\Query' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Query.php',
         'AcVendor\\GuzzleHttp\\Psr7\\Request' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Request.php',
         'AcVendor\\GuzzleHttp\\Psr7\\Response' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Response.php',
         'AcVendor\\GuzzleHttp\\Psr7\\Rfc7230' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Rfc7230.php',
@@ -222,6 +221,7 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\GuzzleHttp\\Psr7\\Uri' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Uri.php',
         'AcVendor\\GuzzleHttp\\Psr7\\UriNormalizer' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/UriNormalizer.php',
         'AcVendor\\GuzzleHttp\\Psr7\\UriResolver' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/UriResolver.php',
+        'AcVendor\\GuzzleHttp\\Psr7\\Utils' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/psr7/src/Utils.php',
         'AcVendor\\GuzzleHttp\\RedirectMiddleware' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/RedirectMiddleware.php',
         'AcVendor\\GuzzleHttp\\RequestOptions' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/RequestOptions.php',
         'AcVendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/../..' . '/ac_vendor/guzzlehttp/guzzle/src/RetryMiddleware.php',
@@ -246,10 +246,6 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\Invoker\\ParameterResolver\\ResolverChain' => __DIR__ . '/../..' . '/ac_vendor/php-di/invoker/src/ParameterResolver/ResolverChain.php',
         'AcVendor\\Invoker\\ParameterResolver\\TypeHintResolver' => __DIR__ . '/../..' . '/ac_vendor/php-di/invoker/src/ParameterResolver/TypeHintResolver.php',
         'AcVendor\\Invoker\\Reflection\\CallableReflection' => __DIR__ . '/../..' . '/ac_vendor/php-di/invoker/src/Reflection/CallableReflection.php',
-        'AcVendor\\PhpDocReader\\AnnotationException' => __DIR__ . '/../..' . '/ac_vendor/php-di/phpdoc-reader/src/PhpDocReader/AnnotationException.php',
-        'AcVendor\\PhpDocReader\\PhpDocReader' => __DIR__ . '/../..' . '/ac_vendor/php-di/phpdoc-reader/src/PhpDocReader/PhpDocReader.php',
-        'AcVendor\\PhpDocReader\\PhpParser\\TokenParser' => __DIR__ . '/../..' . '/ac_vendor/php-di/phpdoc-reader/src/PhpDocReader/PhpParser/TokenParser.php',
-        'AcVendor\\PhpDocReader\\PhpParser\\UseStatementParser' => __DIR__ . '/../..' . '/ac_vendor/php-di/phpdoc-reader/src/PhpDocReader/PhpParser/UseStatementParser.php',
         'AcVendor\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/../..' . '/ac_vendor/psr/container/src/ContainerExceptionInterface.php',
         'AcVendor\\Psr\\Container\\ContainerInterface' => __DIR__ . '/../..' . '/ac_vendor/psr/container/src/ContainerInterface.php',
         'AcVendor\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/../..' . '/ac_vendor/psr/container/src/NotFoundExceptionInterface.php',
@@ -272,7 +268,9 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'AcVendor\\Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'AcVendor\\Psr\\Log\\Test\\TestLogger' => __DIR__ . '/../..' . '/ac_vendor/psr/log/Psr/Log/Test/TestLogger.php',
         'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\Idn' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/Idn.php',
-        'AcVendor\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-mbstring/Mbstring.php',
+        'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\Info' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/Info.php',
+        'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\Resources\\unidata\\DisallowedRanges' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/Resources/unidata/DisallowedRanges.php',
+        'AcVendor\\Symfony\\Polyfill\\Intl\\Idn\\Resources\\unidata\\Regex' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-intl-idn/Resources/unidata/Regex.php',
         'AcVendor\\Symfony\\Polyfill\\Php72\\Php72' => __DIR__ . '/../..' . '/ac_vendor/symfony/polyfill-php72/Php72.php',
         'ActiveCampaign_For_WooCommerce_Runtime_Exception' => __DIR__ . '/../..' . '/includes/exceptions/class-activecampaign-for-woocommerce-runtime-exception.php',
         'Activecampaign_For_Woocommerce' => __DIR__ . '/../..' . '/includes/class-activecampaign-for-woocommerce.php',
@@ -321,14 +319,15 @@ class ComposerStaticInit82d863041d306e8adc64723b738f3a7d
         'Activecampaign_For_Woocommerce_Uninstall_Plugin_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-uninstall-plugin-command.php',
         'Activecampaign_For_Woocommerce_Update_Cart_Command' => __DIR__ . '/../..' . '/includes/commands/class-activecampaign-for-woocommerce-update-cart-command.php',
         'Activecampaign_For_Woocommerce_User_Meta_Service' => __DIR__ . '/../..' . '/includes/services/class-activecampaign-for-woocommerce-user-meta-service.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit82d863041d306e8adc64723b738f3a7d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6d0c34679e12b89c797440098c88ff50::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6d0c34679e12b89c797440098c88ff50::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6d0c34679e12b89c797440098c88ff50::$classMap;
 
         }, null, ClassLoader::class);
     }

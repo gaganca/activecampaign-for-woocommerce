@@ -16,14 +16,15 @@
  * Plugin Name:          ActiveCampaign for WooCommerce
  * Plugin URI:           https://www.activecampaign.com/
  * Description:          Add Abandoned Cart functionality to your WooCommerce store using ActiveCampaign.
- * Version:              1.2.11
+ * Version:              1.2.12
  * Author:               ActiveCampaign
+ * Author URI:           https://www.activecampaign.com/
  * License:              GPL-2.0+
  * License URI:          http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:          activecampaign-for-woocommerce
  * Domain Path:          /languages
  * WC requires at least: 3.0.0
- * WC tested up to:      3.6.0
+ * WC tested up to:      4.6.0
  */
 
 use AcVendor\DI\Container;
@@ -151,6 +152,28 @@ function activecampaign_for_woocommerce_late_loader() {
 	}
 	activecampaign_for_woocommerce_run( activecampaign_for_woocommerce_build_container() );
 }
+
+/**
+ * Show row meta on the plugin screen.
+ *
+ * @param mixed $links Plugin Row Meta.
+ * @param mixed $file  Plugin Base file.
+ *
+ * @return array
+ */
+function activecampaign_for_woocommerce_plugin_row_meta( $links, $file ) {
+	if ( ACTIVECAMPAIGN_FOR_WOOCOMMERCE_PLUGIN_BASE_NAME !== $file ) {
+		return $links;
+	}
+
+	$row_meta = array(
+		'support' => '<a href="' . esc_url( apply_filters( 'activecampaign_for_woocommerce_support_url', 'https://activecampaign.com/contact/' ) ) . '" aria-label="' . esc_attr__( 'Contact Support', 'activecampaign' ) . '">' . esc_html__( 'Contact Support', 'activecampaign' ) . '</a>',
+	);
+
+	return array_merge( $links, $row_meta );
+}
+
+add_filter( 'plugin_row_meta', 'activecampaign_for_woocommerce_plugin_row_meta', 10, 2 );
 
 /**
  * PHPUnit Autoloads this file. In doing so, it actually runs the run() function.

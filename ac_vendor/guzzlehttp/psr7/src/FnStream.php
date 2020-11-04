@@ -1,4 +1,5 @@
 <?php
+
 namespace AcVendor\GuzzleHttp\Psr7;
 
 use AcVendor\Psr\Http\Message\StreamInterface;
@@ -34,6 +35,7 @@ class FnStream implements StreamInterface
 
     /**
      * Lazily determine which methods are not implemented.
+     *
      * @throws \BadMethodCallException
      */
     public function __get($name)
