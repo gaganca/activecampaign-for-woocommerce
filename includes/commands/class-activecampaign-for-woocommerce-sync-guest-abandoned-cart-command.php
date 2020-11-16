@@ -149,6 +149,14 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 * @var WC_Session|null
 	 */
 	private $wc_session;
+	/**
+	 * Whether or not the AC order exists.
+	 * Used to determine whether or not
+	 * we want to update the AC order (PUT request).
+	 *
+	 * @var string
+	 */
+	private $guest_email;
 
 	/**
 	 * Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command constructor.
@@ -161,6 +169,7 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 * @param Ecom_Order_Repository                     $order_repository The Ecom Order Repo.
 	 * @param Ecom_Customer_Repository|null             $customer_repository The Ecom Customer Repo.
 	 * @param Logger                                    $logger The ActiveCampaign WooCommerce logger.
+	 * @param Guest_Email                               $guest_email The Woocomerce guest email.
 	 */
 	public function __construct(
 		WC_Cart $cart = null,
@@ -170,7 +179,8 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 		Ecom_Order_Factory $factory,
 		Ecom_Order_Repository $order_repository,
 		Ecom_Customer_Repository $customer_repository,
-		Logger $logger = null
+		Logger $logger = null,
+		Guest_Email $guest_email = null
 	) {
 		$this->cart                = $cart;
 		$this->customer            = $customer;
@@ -180,6 +190,7 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 		$this->order_repository    = $order_repository;
 		$this->customer_repository = $customer_repository;
 		$this->logger              = $logger;
+		$this->guest_email         = $guest_email;
 	}
 
 	/**
@@ -201,7 +212,9 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 	 */
 	public function execute( ...$args ) {
 		$this->init();
-
+		if(is_email($args[0])){
+			$this->guest_email = $args[0];
+		}
 		if (
 			! $this->validate_request() ||
 			! $this->setup_woocommerce_customer() ||
@@ -257,12 +270,12 @@ class Activecampaign_For_Woocommerce_Sync_Guest_Abandoned_Cart_Command implement
 			return false;
 		}
 
-		if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'sync_guest_abandoned_cart_nonce' ) ) {
+		if ( ! $this->guest_email && ! wp_verify_nonce( $_REQUEST['nonce'], 'sync_guest_abandoned_cart_nonce' ) ) {
 			$this->logger->debug( 'sync_guest_abandoned_cart_nonce failed' );
 			return false;
 		}
 
-		$this->customer_email = sanitize_email( $_REQUEST['email'] );
+		$this->customer_email = sanitize_email(isset($this->guest_email) ? $this->guest_email : $_REQUEST['email'] );
 
 		if ( ! $this->customer_email ) {
 			$this->logger->debug( 'invalid customer email' );

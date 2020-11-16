@@ -394,6 +394,11 @@ class Activecampaign_For_Woocommerce {
 			$this->add_accepts_marketing_to_customer_meta_command,
 			'execute'
 		);
+		$this->loader->add_filter(
+			'coast_guest_email_added',
+			$this->sync_guest_abandoned_cart_command,
+			'execute'
+		);
 	}
 
 	/**
